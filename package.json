@@ -1,11 +1,13 @@
 {
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
     "dto-mapping": "^1.1.1",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "js": "^0.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.1",
     "mssql": "^10.0.4",
@@ -13,7 +15,7 @@
     "nodemon": "^3.1.4",
     "reflect-metadata": "^0.2.2",
     "sequelize": "^6.37.3",
-    "typeorm": "^0.3.20"
+    "xml": "^1.0.1"
   },
   "name": "nodeboard",
   "version": "1.0.0",
