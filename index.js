@@ -2,9 +2,9 @@ const express = require("express");
 const app = express();
 const session = require("express-session");
 const PORT = 3040;
-const ROUTES_HOME = require("./components/router/router.js");
+const ROUTES_HOME = require("./server/router/router.js");
 const mongoose = require('mongoose');
-const config = require('./components/config/key.js');
+const config = require('./server/config/key.js');
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 app.use(express.json());
@@ -30,7 +30,7 @@ mongoose.connect(config.mongoURI)
 
 //앱 세팅 
 //=================== 이 밑으로 미들웨어 설정 하지 않기, route 설정 전에 설정해야 하는 듯 하다=============
-app.set("views", "./components/views");
+app.set("views", "./client/views");
 app.set("view engine", "ejs");
 
 app.use(express.static(`${__dirname}/public`));

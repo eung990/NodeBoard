@@ -1,6 +1,6 @@
-const User = require("../components/user/model/UserModel")
+const User = require("../user/model/UserModel")
 
-let auth = async (req, res, next) => {
+let auth =  (req, res, next) => {
     //인증 처리하는곳
     //클라이언트에서 토큰을 가져온다
     //토큰을 복호화 한 후 유저 찾는다
@@ -11,13 +11,15 @@ let auth = async (req, res, next) => {
     console.log(token);
 
     try {
-        var user = await User.findByToken(token)
+        var user =  User.findByToken(token)
         if (!user) return res.json({ isAuth: false, error: true });
         req.token = token;
         req.user = user;
+        console.log("====req.token=====" + req.token + "==========")
+        console.log("====req.user=====" + req.user + "==========")
         next();
     } catch (err) {
-        return err;
+        return console.log("=====오류=====" + err + "==========")
     }
 
     // , (err,user) => {

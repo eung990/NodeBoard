@@ -21,10 +21,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "bin": {
-    "nodeboard": "server/server.js"
+    "nodeboard": "start/start.js"
   },
   "scripts": {
-    "start": "nodemon ./components/server/server.js",
+    "start": "nodemon ./server/start/start.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "kimwan",

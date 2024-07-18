@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
-const { decode } = require('punycode');
 
 
 const userSchema = mongoose.Schema({
@@ -73,15 +72,7 @@ userSchema.pre('save', async function (next) {
 
     if (user.isModified('password')) {
         // //Salt 생성
-        // bcrypt.genSalt(saltRounds, function (err, salt) {
-        //     if (err) return next(err);
 
-        //     bcrypt.hash(user.password, salt, function (err, hash) {
-        //         if (err) return next(err);
-        //         user.password = hash;
-        //         next();
-        //     });
-        // });
         let salt = await bcrypt.genSalt(saltRounds);
 
         if (!salt) {
@@ -101,28 +92,9 @@ userSchema.pre('save', async function (next) {
     }
 });
 
-// userSchema.pre('save', async function (next) {
-//     const user = this;
-
-//     if (user.isModified('password')) {
-//         try {
-//             const salt = await bcrypt.genSalt(saltRounds);
-//             const hash = await bcrypt.hash(user.password, salt);
-//             user.password = hash;
-//             next();
-//         } catch (error) {
-//             next(error);
-//         }
-//     } else {
-//         next();
-//     }
-// });
 
 userSchema.methods.comparePassword = async function (plainPassword, cb) {
-    // bcrypt.compare(plainPassword, this.password, function(err,isMatch){
-    //     if(err) return cb(err);
-    //     cb(null,isMatch);
-    // })
+
 
     bcrypt.compare(plainPassword, this.password)
         .then((isMatch) => {
@@ -132,13 +104,6 @@ userSchema.methods.comparePassword = async function (plainPassword, cb) {
             if (err) return cb(err);
         })
 
-    // var isMatch = await bcrypt.compare(plainPassword, this.password);
-
-    // if(isMatch){
-    //     cb(null,isMatch);
-    // }
-
-    // cb(err);
 }
 
 userSchema.methods.generateToken = function (cb) {
@@ -156,25 +121,25 @@ userSchema.methods.generateToken = function (cb) {
         })
 }
 
-userSchema.statics.findByToken = async function (token, cb) {
+userSchema.statics.findByToken = async function (token) {
     var user = this;
 
-    try {
-        var decode = await jwt.verify(token, 'secretToken')
-        var findUser = await user.findOne({ "_id": decode, "token": token })
-        cb(null, findUser)
-    }
-    catch (err) {
-        return cb(err);
-    }
-    // .then((decode) => {
-    //     user.findOne({ "_id" : decode, "token" : token}, (err,user) => {
-    //         if (err) return cb(err);
+    jwt.verify(token, 'secretToken', async (err, decode) => {
+        if (err) {
+            return console.log("=====오류=====" + err + "==========")
+        }
 
-    //         cb(null,user);
+        try {
 
-    //     })
-    // })
+
+            var findUser = await user.findOne({ "_id": decode, "token": token })
+            //console.log("=========" + findUser + "==========")
+            return findUser
+        }
+        catch (err) {
+            return console.log("=====오류=====" + err + "==========")
+        }
+    });
 }
 
 const User = mongoose.model('User', userSchema);
