@@ -7,14 +7,14 @@ let auth =  (req, res, next) => {
     //유저 있으면 okey
     //유저 없으면 no
 
-    let token = req.cookies.x_auth;
+    let token = req.cookies.x_auth; // 클라이언트 토큰 가져오는 거
     console.log(token);
 
     try {
-        var user =  User.findByToken(token)
+        var user =  User.findByToken(token) //토큰 가지고 디코드 한 후 그 값으로 해당 유저 찾음 
         if (!user) return res.json({ isAuth: false, error: true });
         req.token = token;
-        req.user = user;
+        req.user =  JSON.stringify(user);
         console.log("====req.token=====" + req.token + "==========")
         console.log("====req.user=====" + req.user + "==========")
         next();
