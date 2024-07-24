@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { SignUpUser } from '../../../_actions/user_actions';
 import { useNavigate } from 'react-router-dom';
-import Auth from "../../../hoc/hoc"
+import { Typography, Button, Form, message, Input, Icon } from 'antd';
+
 
 function SignUpPage(props) {
   const dispatch = useDispatch();
@@ -27,7 +28,9 @@ function SignUpPage(props) {
   const onConfirmPasswordHandler = (event) => {
     setConfirmPassword(event.currentTarget.value)
   }
-
+  const BackButtonHandler = (event) => {
+    navigate("/")
+  }
   const SignUpSubmitHandler = async (event) => {
     event.preventDefault();
 
@@ -59,26 +62,30 @@ function SignUpPage(props) {
       display: 'flex', justifyContent: 'center', alignItems: 'center',
       width: '100%', height: "100vh"
     }}>
-      <form style={{
+      <Form style={{
         display: 'flex', flexDirection: 'column'
-      }} onSubmit={SignUpSubmitHandler}>
+      }}>
         <label >Name</label>
-        <input type='text' value={Name} onChange={onNameHandler} title="이름을 입력하세요">
-        </input>
+        <Input type='text' value={Name} onChange={onNameHandler} title="이름을 입력하세요">
+        </Input>
         <label >Email</label>
-        <input type='email' value={Email} onChange={onEmailHandler} title="이메일 주소를 입력하세요">
-        </input>
+        <Input type='email' value={Email} onChange={onEmailHandler} title="이메일 주소를 입력하세요">
+        </Input>
         <label>Password</label>
-        <input type='text' value={Password} onChange={onPasswordHandler} title="비밀번호를 입력하세요">
-        </input>
+        <Input type='text' value={Password} onChange={onPasswordHandler} title="비밀번호를 입력하세요">
+        </Input>
         <label>ConfirmPassword</label>
-        <input type='text' value={ConfirmPassword} onChange={onConfirmPasswordHandler} title="비밀번호 확인">
-        </input>
-        <br/>
-        <button type="submit">
+        <Input type='text' value={ConfirmPassword} onChange={onConfirmPasswordHandler} title="비밀번호 확인">
+        </Input>
+        <br />
+        <Button type="button" onClick={SignUpSubmitHandler} style={{ backgroundColor: '#8BC34A' }}>
           Sign UP
-        </button>
-      </form>
+        </Button>
+        <br />
+        <Button type="button" onClick={BackButtonHandler} style={{ backgroundColor: '#d6d6d6' }}>
+          Back
+        </Button>
+      </Form>
     </div>
   )
 }

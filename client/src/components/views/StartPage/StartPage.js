@@ -3,20 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Auth from "../../../hoc/hoc"
 
-function StartPage(){
+function StartPage() {
     const navigate = useNavigate();
     useEffect(() => {
-        axios.get('/api/hello')
-        .then(res => console.log(res.data));
-    
-    },[])
-    const onLogoutHandler = async () =>{
+       
+
+    }, [])
+    const onLogoutHandler = async () => {
         const res = await axios.get("/api/users/logout")
 
-        if(res){
+        if (res) {
             navigate("/LoginPage");
             console.log("로그아웃 완료")
-        }else{
+        } else {
             console.log("로그아웃 실패")
         }
     }
@@ -28,23 +27,31 @@ function StartPage(){
     const onSignUpHandler = () => {
         navigate("/SignUpPage");
     }
+
+    const onProductPageHandler = () => {
+        navigate("/ProductPage/upload");
+    }
     return (
         <div style={{
-            display:'flex', justifyContent:'center', alignItems:'center',
-            width:'100%',height:"100vh"
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            width: '100%', height: "100vh"
         }}>
             <h2>StartPage</h2>
-
+            <br />
             <button onClick={onLogoutHandler}>
                 Logout
             </button>
-
+            <br />
             <button onClick={onLoginHandler}>
                 Login
             </button>
-
+            <br />
             <button onClick={onSignUpHandler}>
                 SignUp
+            </button>
+            <br />
+            <button onClick={onProductPageHandler}>
+                ProductPage
             </button>
         </div>
     )

@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const session = require("express-session");
 const PORT = 3040;
-const ROUTES_HOME = require("./server/router/router.js");
+// const ROUTES_HOME = require("./server/router/router.js");
 const mongoose = require('mongoose');
 const config = require('./server/config/key.js');
 const cookieParser = require("cookie-parser");
@@ -12,6 +12,8 @@ app.use(express.json());
 //app.use(cors());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+
+
 
 app.use(session({
   secret: 'your-secret-key',
@@ -37,7 +39,10 @@ app.set("view engine", "ejs");
 
 app.use(express.static(`${__dirname}/public`));
 
-app.use("/", ROUTES_HOME);
+// api/users 경로로 들어오는 요청을 ./server/router/UserRouter.js 경로로 다 처리하겠다
+app.use('/api/users', require("./server/router/UserRouter.js"))
+//app.use('/api/product', require('./server/router/ProductRouter.js'))
+//app.use("/", ROUTES_HOME);
 
 
 

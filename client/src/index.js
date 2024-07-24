@@ -10,11 +10,13 @@ import {thunk} from 'redux-thunk';
 import Reducer from './_reducers'
 
 
+// 미들웨어(promiseMiddleware, thunk)와 함께 설정되어 있어 비동기 작업 처리 가능
 const createStoreWithMiddleware = applyMiddleware(promiseMiddleware,thunk)(createStore)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider 
+  // Redux 중앙 저장소 애플리케이션 전체 상태를 보관
     store={createStoreWithMiddleware(Reducer
       ,
       window.__REDUX_DEVTOOLS_EXTENSION__ &&

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../../_actions/user_actions';
 import { useNavigate } from 'react-router-dom';
-import Auth from "../../../hoc/hoc"
+import { Typography, Button, Form, message, Input, Icon } from 'antd';
 
 
 function LoginPage(props) {
@@ -19,7 +19,9 @@ function LoginPage(props) {
   const onPasswordHandler = (event) => {
     setPassword(event.currentTarget.value)
   }
-
+  const BackButtonHandler =() => {
+    navigate('/')
+  }
   const LoginSubmitHandler = async (event) => {
 
     event.preventDefault();
@@ -48,24 +50,30 @@ function LoginPage(props) {
 
 
   return (
+
+    
     <div style={{
       display: 'flex', justifyContent: 'center', alignItems: 'center',
       width: '100%', height: "100vh"
     }}>
-      <form style={{
+      <Form style={{
         display: 'flex', flexDirection: 'column'
-      }} onSubmit={LoginSubmitHandler}>
+      }} >
         <label >Email</label>
-        <input type='email' value={Email} onChange={onEmailHandler} title="이메일 주소를 입력하세요">
-        </input>
+        <Input type='email' value={Email} onChange={onEmailHandler} title="이메일 주소를 입력하세요">
+        </Input>
         <label>Password</label>
-        <input type='text' value={Password} onChange={onPasswordHandler} title="비밀번호를 입력하세요">
-        </input>
+        <Input type='text' value={Password} onChange={onPasswordHandler} title="비밀번호를 입력하세요">
+        </Input>
         <br />
-        <button type="submit">
+        <Button type="button"  onClick={LoginSubmitHandler} style={{ backgroundColor: '#8BC34A' }}>
           Login
-        </button>
-      </form>
+        </Button>
+        <br />
+        <Button type="button" onClick={BackButtonHandler} style={{ backgroundColor: '#d6d6d6' }}>
+          Back
+        </Button>
+      </Form>
     </div>
   )
 }

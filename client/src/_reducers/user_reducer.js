@@ -10,7 +10,6 @@ export default function userReducer(state = {}, action) {
         case LOGIN_USER:
             return { ...state, loginSuccess: action.payload }
 
-
         case SIGNUP_USER:
             return { ...state, signUpSuccess: action.payload }
 
