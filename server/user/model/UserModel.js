@@ -24,19 +24,17 @@ const userSchema = mongoose.Schema({
         kMaxLength: 50
     },
     isAdmin: {
-        type: String,
+        type: Boolean,
         trim: true,
         kMaxLength: 50
     },
     isAuth: {
-        type: String,
-        trim: true,
-        kMaxLength: 50
+        type: Boolean,
     },
     role: {
-        type: String,
+        type: Number,
         trim: true,
-        kMaxLength: 50
+        default:0
     },
     image: String,
     token: {
@@ -49,12 +47,12 @@ const userSchema = mongoose.Schema({
     createdAt: {
         type: String,
         trim: true,
-        kMaxLength: 50
+        default: mongoose.now
     },
     updatedAt: {
         type: String,
         trim: true,
-        kMaxLength: 50
+        default: mongoose.now
     },
 
 
@@ -124,23 +122,40 @@ userSchema.methods.generateToken = function (cb) {
 userSchema.statics.findByToken = async function (token) {
     var user = this;
 
-    jwt.verify(token, 'secretToken', async (err, decode) => {
-        if (err) {
-            return console.log("=====오류=====" + err + "==========")
-        }
+    // jwt.verify(token, 'secretToken', (err, decode) => {
+    //     const userInfo = user.findOne({ "_id": decode, "token": token });
 
-        try {
+    //     if (err) {
+    //         return console.log("=====오류2=====" + err + "==========")
+    //     }
+    //     console.log("=====userInfo=====" + userInfo + "==========")
+    //     return userInfo
+    // })
 
+    try {
+        // // jwt.verify를 Promise로 감싸서 await 사용 가능하게 함
+        // const decode = await new Promise((resolve, reject) => {
+        //   jwt.verify(token, 'secretToken', (err, decoded) => {
+        //     if (err) reject(err);
+        //     else resolve(decoded);
+        //   });
+        // });
 
-            var findUser = await user.findOne({ "_id": decode, "token": token })
-            //console.log("=========" + findUser + "==========")
-            return findUser
+        const decode = await jwt.verify(token, 'secretToken')
+
+        if(!decode){
+            return console.log("error")
         }
-        catch (err) {
-            return console.log("=====오류=====" + err + "==========")
-        }
-    });
-}
+    
+        const userInfo = await user.findOne({ "_id": decode, "token": token });
+        console.log("=====userInfo=====" + userInfo + "==========");
+        return userInfo;
+      } catch (err) {
+        console.log("=====오류=====" + err + "==========");
+        throw err; // 에러를 상위로 전파
+      }
+};
+
 
 const User = mongoose.model('User', userSchema);
 

@@ -25,17 +25,7 @@ router.post("/api/users/login", CTRL.input.login);
 
 router.get('/api/users/logout', auth, CTRL.input.loginOut)
 
-router.get('/api/users/auth', auth, (req, res) => {
-  res.status(200).json({
-    _id: req.user._id,
-    isAdmin: req.user.role === 0 ? false : true,
-    isAuth: true,
-    email: req.user.email,
-    name: req.user.name,
-    role: req.user.role,
-
-  })
-})
+router.get('/api/users/auth', auth, CTRL.input.userAuth)
 
 
 module.exports = router;

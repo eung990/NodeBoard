@@ -6,11 +6,11 @@ const ROUTES_HOME = require("./server/router/router.js");
 const mongoose = require('mongoose');
 const config = require('./server/config/key.js');
 const cookieParser = require("cookie-parser");
-const cors = require('cors');
-app.use(cookieParser());
-app.use(express.json());
-app.use(cors());
+//const cors = require('cors');
 
+app.use(express.json());
+//app.use(cors());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
