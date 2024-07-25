@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Dropzone from 'react-dropzone';
 import Icon from '@ant-design/icons'
-import Axios from 'axios';
+import axios from 'axios';
 function FileUpload(props) {
 
     const [Images, setImages] = useState([])
@@ -14,18 +14,23 @@ function FileUpload(props) {
         }
         formData.append("file", files[0])
         //save the Image we chose inside the Node Server 
-        Axios.post('/api/product/uploadImage', formData, config)
+        axios.post('/api/product/uploadImage', formData, config)
             .then(response => {
                 if (response.data.success) {
-
-                    setImages([...Images, response.data.image])
-                    props.refreshFunction([...Images, response.data.image])
+                    const imagePath = response.data.image.replace(/\\/g, '/');
+                    console.log("===response.data.image====", response.data.image)
+                    setImages([...Images, imagePath])
+                    console.log("===Images====", Images)
+                    props.refreshFunction([...Images, imagePath])
 
                 } else {
                     alert('Failed to save the Image in Server')
                 }
             })
     }
+
+
+
 
 
     const onDelete = (image) => {
@@ -52,8 +57,8 @@ function FileUpload(props) {
                     }}
                         {...getRootProps()}
                     >
-                        {/* {console.log('getRootProps', { ...getRootProps() })}
-                        {console.log('getInputProps', { ...getInputProps() })} */}
+                        {console.log('getRootProps', { ...getRootProps() })}
+                        {console.log('getInputProps', { ...getInputProps() })}
                         <input {...getInputProps()} />
                         <Icon type="plus" style={{ fontSize: '3rem' }} />
 
@@ -61,16 +66,16 @@ function FileUpload(props) {
                 )}
             </Dropzone>
 
-            {/* <div style={{ display: 'flex', width: '350px', height: '240px', overflowX: 'scroll' }}>
+            <div style={{ display: 'flex', width: '350px', height: '240px', overflowX: 'scroll' }}>
 
                 {Images.map((image, index) => (
                     <div onClick={() => onDelete(image)}>
-                        <img style={{ minWidth: '300px', width: '300px', height: '240px' }} src={`http://localhost:3040/${image}`} alt={`productImg-${index}`} />
+                        <img style={{ minWidth: '300px', width: '300px', height: '240px' }} src={`${image}`} alt={`productImg-${index}`} />
                     </div>
                 ))}
 
 
-            </div> */}
+            </div>
 
         </div>
     )

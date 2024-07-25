@@ -1,17 +1,18 @@
 import React, { useEffect } from "react";
 import { userAuth } from "../_actions/user_actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 
 const Auth = (SpecificComponent, option, adminRoute = null) => {
-  function AuthenticationCheck() {
+  function AuthenticationCheck(props) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    let user = useSelector(state => state.user);
 
     useEffect(() => {
       dispatch(userAuth())
         .then((res) => {
-          console.log("======res.payload.data.isAuth====" , res.payload.data.isAuth);
+          console.log("======res.payload.data.isAuth====", res.payload.data.isAuth);
 
           //로그인 하지 않은 상태
           if (!res.payload.data.isAuth) {
@@ -33,7 +34,7 @@ const Auth = (SpecificComponent, option, adminRoute = null) => {
     }, [dispatch, navigate]);
 
     return (
-      <SpecificComponent />
+      <SpecificComponent  {...props} user={user} />
     );
   }
 
