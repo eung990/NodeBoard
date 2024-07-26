@@ -45,7 +45,7 @@ app.use(express.static(`${__dirname}/public`));
 app.use('/api/users',API_USERS )
 app.use('/api/product',API_PRODUCT )
 //app.use("/", ROUTES_HOME);
-app.use('/ProductPage/ImageUpload', express.static('ImageUpload'));
+app.use('/product/ImageUpload', express.static('ImageUpload'));
 app.use('/ImageUpload', express.static('ImageUpload'));
 
 

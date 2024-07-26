@@ -35,7 +35,7 @@ const input = {
         })
     },
 
-    uploadProduct: async(req, res) => {
+    uploadProduct: async (req, res) => {
         try {
             console.log("======req.body======", req.body);
             const product = new Product(req.body);
@@ -47,11 +47,37 @@ const input = {
         }
     },
 
-    getProduct: async(req, res) => {
+    getProduct: async (req, res) => {
         try {
             const products = await Product.find();
             console.log("======products======", products)
             return res.status(200).json({ success: true, products });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ success: false, error: err.message });
+        }
+    },
+
+    getProductById: async (req, res) => {
+
+        let type = req.query.type;
+        let id = req.query.id;
+        console.log("req.query.id", req.query.id)
+
+        if (type === "array") {
+            let ids = req.query.id.split(',');
+            id = [];
+            id = ids.map(item => {
+                return item
+            })
+        }
+    
+        try {
+            // {_id:{&in:id}}에서 in 연산자는 배열 안의 값과 일치하는 값을 찾는다.
+            const product = await Product.find({ _id: { $in: id } })
+                .populate("writer")
+
+            return res.status(200).json({ success: true, product });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ success: false, error: err.message });

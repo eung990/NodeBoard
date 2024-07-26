@@ -3,6 +3,9 @@ import { userAuth } from "../_actions/user_actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 
+// SpecificComponent = 특정 컴포넌트
+// option = 로그인 여부 확인
+// adminRoute = 관리자 여부 확인
 const Auth = (SpecificComponent, option, adminRoute = null) => {
   function AuthenticationCheck(props) {
     const dispatch = useDispatch();
@@ -17,7 +20,8 @@ const Auth = (SpecificComponent, option, adminRoute = null) => {
           //로그인 하지 않은 상태
           if (!res.payload.data.isAuth) {
             if (option) {
-              navigate("/LoginPage");
+              
+              navigate("/login");
             }
           }
           //로그인 한 상태 
