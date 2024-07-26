@@ -82,6 +82,16 @@ const input = {
             console.error(err);
             return res.status(500).json({ success: false, error: err.message });
         }
+    },
+
+    deleteProduct: async (req, res) => {
+        try {
+            await Product.findByIdAndDelete(req.query.id);
+            return res.status(200).json({ success: true });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ success: false, error: err.message });
+        }
     }
 }
 

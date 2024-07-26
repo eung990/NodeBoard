@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { useNavigate,useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Typography, Button, Form, Input } from 'antd';
 import FileUpload from "../../../utils/FileUpload";
 
@@ -22,16 +22,31 @@ const Continents = [
     { key: 9, value: "I" },
 ]
 
-function UploadProductPage(props) {
+function EditProductPage() {
 
     const navigate = useNavigate();
-    console.log('props:', props);
+
+    const { productId } = useParams();
+    const user = useSelector(state => state.user);
+
     const [TitleValue, setTitle] = useState("");
     const [DescriptionValue, setDescription] = useState("");
     const [ContinentValue, setInfo] = useState(1);
     const [Images, setImages] = useState([])
 
 
+    useEffect(() => {
+        axios.get(`/api/product/products_by_id?id=${productId}&type=single`)
+            .then(response => {
+                setTitle(response.data.title)
+                setDescription(response.data.description)
+                setInfo(response.data.continents)
+                //setImages(response.data.images)
+                console.log('==response.data:',response.data);
+            }).catch(err => {
+                console.log("=====EditError",err)
+            })
+    })
     const onTitleHandler = (event) => {
 
         setTitle(event.currentTarget.value)
@@ -57,15 +72,14 @@ function UploadProductPage(props) {
 
     const onSubmit = (event) => {
         event.preventDefault();
-        console.log('ContinentValue:', ContinentValue);
-        console.log('authSuccess:', props.authSuccess);
+  
 
         if (!TitleValue || !DescriptionValue ||
             !ContinentValue || !Images) {
             return alert('fill all the fields first!')
         }
         const variables = {
-            writer: props.user.authSuccess.data._id,
+            writer: user.authSuccess.data._id,
             title: TitleValue,
             description: DescriptionValue,
             images: Images,
@@ -135,4 +149,4 @@ function UploadProductPage(props) {
     )
 }
 
-export default UploadProductPage
+export default EditProductPage

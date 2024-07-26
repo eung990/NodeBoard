@@ -30,12 +30,6 @@ function LoginPage(props) {
       email: Email,
       password: Password
     }
-    // var LoginSuccess= await dispatch(loginUser(body))
-    // if (LoginSuccess){
-    //   props.history.push("/");
-    // }else{
-    //   alert("로그인 실패")
-    // }
 
     dispatch(loginUser(body))
       .then(response => {

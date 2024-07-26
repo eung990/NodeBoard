@@ -13,4 +13,6 @@ router.get("/getProduct", CTRL.input.getProduct);
 
 router.get("/products_by_id", CTRL.input.getProductById);
 
+router.delete("/delete_product",auth, CTRL.input.deleteProduct);
+
 module.exports = router;

@@ -122,16 +122,6 @@ userSchema.methods.generateToken = function (cb) {
 userSchema.statics.findByToken = async function (token) {
     var user = this;
 
-    // jwt.verify(token, 'secretToken', (err, decode) => {
-    //     const userInfo = user.findOne({ "_id": decode, "token": token });
-
-    //     if (err) {
-    //         return console.log("=====오류2=====" + err + "==========")
-    //     }
-    //     console.log("=====userInfo=====" + userInfo + "==========")
-    //     return userInfo
-    // })
-
     try {
         // // jwt.verify를 Promise로 감싸서 await 사용 가능하게 함
         // const decode = await new Promise((resolve, reject) => {

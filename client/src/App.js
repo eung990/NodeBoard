@@ -11,6 +11,7 @@ import LoginPage from "./components/views/LoginPage/LoginPage";
 import SignUpPage from "./components/views/SignUpPage/SignUpPage";
 import UploadProductPage from "./components/views/UploadProductPage/UploadProductPage"
 import DetailProductPage from "./components/views/DetailProductPage/DetailProductPage"
+import EditProductPage from "./components/views/EditProductPage/EditProductPage"
 
 function App() {
   const newStartPage = Auth(StartPage, null);
@@ -18,6 +19,8 @@ function App() {
   const newSignUpPage = Auth(SignUpPage, false);
   const newUploadProductPage = Auth(UploadProductPage, true);
   const newDetailProductPage = Auth(DetailProductPage, null);
+  const newEditProductPage = Auth(EditProductPage, true);
+
   return (
     <BrowserRouter>
       <div>
@@ -27,6 +30,7 @@ function App() {
           <Route path="/signUp" element={newSignUpPage} />
           <Route path="/product/upload" element={newUploadProductPage} />
           <Route path="/product/:productId" element={newDetailProductPage} />
+          <Route path="/product/update/:productId" element={newEditProductPage} />
         </Routes>
       </div>
     </BrowserRouter>

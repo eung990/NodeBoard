@@ -49,7 +49,7 @@ function StartPage(props) {
 
                         cover={<a href={`/product/${product._id}`}><ImageSlider images={product.images} /></a>}
                     >
-                        <Meta title={product.title} description={product.description} />
+                        <a href={`/product/${product._id}`}><Meta title={product.title} description={product.description} /></a>
                     </Card>
                 </Col>
             )

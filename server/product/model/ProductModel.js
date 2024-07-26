@@ -16,8 +16,8 @@ const productSchema = mongoose.Schema({
         kMaxLength : 50
     },
     continents: {
-        type: Number,
-        default: 1
+        type: String,
+        default: ""
     },
     images: {
         type: Array,
