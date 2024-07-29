@@ -1,12 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Dropzone from 'react-dropzone';
-import Icon from '@ant-design/icons'
+import {UploadOutlined} from '@ant-design/icons'
 import axios from 'axios';
 function FileUpload(props) {
 
     const [Images, setImages] = useState([])
 
+    useEffect(() => {
+        if (props.initialImages && props.initialImages.length > 0) {
+            setImages(props.initialImages);
+            console.log("====props.initialImages :", props.initialImages)
+        }
+    }, [props.initialImages]);
+
     const onDrop = (files) => {
+
 
         let formData = new FormData();
         const config = {
@@ -60,7 +68,7 @@ function FileUpload(props) {
                         {console.log('getRootProps', { ...getRootProps() })}
                         {console.log('getInputProps', { ...getInputProps() })}
                         <input {...getInputProps()} />
-                        <Icon type="plus" style={{ fontSize: '3rem' }} />
+                        <UploadOutlined  type="plus" style={{ fontSize: '8rem' }} />
 
                     </div>
                 )}
@@ -70,7 +78,7 @@ function FileUpload(props) {
 
                 {Images.map((image, index) => (
                     <div onClick={() => onDelete(image)}>
-                        <img style={{ minWidth: '300px', width: '300px', height: '240px' }} src={`${image}`} alt={`productImg-${index}`} />
+                        <img style={{ minWidth: '300px', width: '300px', height: '240px' }} src={`/${image}`} alt={`productImg-${index}`} />
                     </div>
                 ))}
 

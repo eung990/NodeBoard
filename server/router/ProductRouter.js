@@ -11,7 +11,7 @@ router.post("/updateProduct",auth, CTRL.input.updateProduct);
 
 // router.get("/getProduct",auth, CTRL.input.getProduct);
 
-router.get("/getProduct", CTRL.input.getProduct);
+router.post("/getProduct", CTRL.input.getProduct);
 
 router.get("/products_by_id", CTRL.input.getProductById);
 

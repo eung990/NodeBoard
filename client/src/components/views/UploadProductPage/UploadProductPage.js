@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import Continents from '../../../utils/Continents';
 import { Typography, Button, Form, Input } from 'antd';
 import FileUpload from "../../../utils/FileUpload";
 
@@ -10,17 +10,6 @@ const { Title } = Typography;
 const { TextArea } = Input;
 
 
-const Continents = [
-    { key: 1, value: "A" },
-    { key: 2, value: "B" },
-    { key: 3, value: "C" },
-    { key: 4, value: "D" },
-    { key: 5, value: "E" },
-    { key: 6, value: "F" },
-    { key: 7, value: "G" },
-    { key: 8, value: "H" },
-    { key: 9, value: "I" },
-]
 
 function UploadProductPage(props) {
 

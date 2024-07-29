@@ -34,7 +34,7 @@ function EditProductPage() {
     const [ContinentValue, setInfo] = useState(1);
     const [Images, setImages] = useState([])
 
-    var resImages = useRef([]);
+
 
 
     useEffect(() => {
@@ -46,12 +46,11 @@ function EditProductPage() {
                 setInfo(res.continents)
                 setImages(res.images)
                 console.log('====수정페이지 -> 서버에 요청해서 받은 데이터 :', res);
-                console.log('====setTitle :',res.title);
+                console.log('====setTitle :', res.title);
                 console.log('====setDescription :', res.description);
                 console.log('====setInfo :', res.continents);
-                console.log('====res.images :', res.images);         
-                resImages.current = res.images
-                console.log('====resImages :', resImages); 
+                console.log('====res.images :', res.images);
+
 
             }).catch(err => {
                 console.log("=====EditError", err)
@@ -108,6 +107,7 @@ function EditProductPage() {
                 }
             })
 
+
     }
 
     return (
@@ -119,7 +119,8 @@ function EditProductPage() {
             <Form  >
 
                 {/* DropZone */}
-                <FileUpload refreshFunction={updateImages} initialImages={resImages} />
+                {/* 컴포넌트끼리 props로 데이터 전달할 때는 따로따로 선언 하고 .객체명을 통해 사용 */}
+                <FileUpload refreshFunction={updateImages} initialImages={Images} />
                 <br />
                 <br />
                 <label>Title</label>

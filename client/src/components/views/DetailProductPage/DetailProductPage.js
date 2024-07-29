@@ -1,32 +1,29 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Row, Col, Button } from 'antd'
+import { Row, Col, Button, Typography, Space, Divider, } from 'antd'
 import ProductImage from './Sections/ProductImage'
 import ProductInfo from './Sections/ProductInfo'
+import Comment from './Sections/Comment'
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { LeftOutlined } from '@ant-design/icons';
+
+const { Title, Paragraph } = Typography;
 
 function DetailProductPage(props) {
-
-    // console.log("===props===",props);
-    // const  productId  = props.match.params.productId;
     const { productId } = useParams();
     const navigate = useNavigate();
     const user = useSelector(state => state.user);
 
-
     const [Product, setProduct] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
- 
-    console.log("=====productId==", productId)
-    console.log("=====user?.authSuccess?.data?._id==", user?.authSuccess?.data?._id)
+
     useEffect(() => {
         axios.get(`/api/product/products_by_id?id=${productId}&type=single`)
             .then(response => {
                 setProduct(response.data.product);
                 setIsLoading(false);
-                console.log("===response.data.product==", response.data.product);
             })
             .catch(error => {
                 console.log(error);
@@ -34,55 +31,92 @@ function DetailProductPage(props) {
             })
     }, [productId]);
 
-    // 로딩 중일 때 로딩 화면 보여주기, 비동기작업이 완료 되기 전까지 undefined 상태 받아오는 걸 예방
     if (isLoading) {
         return <div>Loading...</div>;
-        
     }
-    
+
+
+    const handleGoBack = () => {
+        navigate(-1); // 이전 페이지로 이동
+    }
+
     const handleUpdateProduct = () => {
-        console.log("====Product._id 파람으로 보내는 중==", Product[0].writer._id)
         navigate(`/product/update/${productId}`)
     }
 
+
     const handleDeleteProduct = () => {
         console.log("===handleDeleteProduct==")
-        axios.delete(`/api/product/delete_product?id=${Product[0].writer._id}`)
+        axios.delete(`/api/product/delete_product?id=${productId}`)
             .then(response => {
-                console.log("===response.data.product==", response.data.product);
+                console.log("===제품 ID==", productId);
                 navigate('/')
             })
             .catch(error => {
                 console.log(error);
             })
     }
+
     return (
-        <div className='product_detail_page' style={{ width: '100%', padding: '3rem 4rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <h2>{Product.title}</h2>
-            </div>
+        <div className='product_detail_page' style={{
+            width: '100%',
+            padding: '1rem',
+            backgroundColor: '#ffffff'
+        }}>
             <Row gutter={[16, 16]}>
-                <Col lg={12} xs={24}>
-                    <ProductImage detail={Product} />
+                <Col xs={24} sm={24} md={12}>
+                    <div style={{
+                        borderRadius: '8px',
+                        overflow: 'hidden',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    }}>
+                        <ProductImage detail={Product} />
+                    </div>
                 </Col>
-                <Col lg={12} xs={24}>
-                    <ProductInfo detail={Product} />
-                </Col>
+                <Col xs={24} sm={24} md={12}>
+                    <Space direction="vertical" size="large" style={{ display: 'flex', width: '100%' }}>
+                        <div>
+                            <Title level={3} style={{ marginBottom: '0.25rem' }}>
+                                {Product[0]?.title}</Title>
 
+                        </div>
+
+                        <Divider style={{ margin: '12px 0' }} />
+
+                        <div>
+                            <Title level={4}>강사 이력</Title>
+                            <Paragraph>
+                                {Product[0]?.description}
+                            </Paragraph>
+                        </div>
+
+                        <Divider style={{ margin: '12px 0' }} />
+
+                        <div>
+                            <Title level={5}>한 눈에 보기</Title>
+
+                        </div>
+
+                        <ProductInfo detail={Product} />
+
+                        <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+                            <Button icon={<LeftOutlined />} onClick={handleGoBack}>뒤로가기</Button>
+                            {Product[0].writer._id === user?.authSuccess?.data?._id && (
+                                <Space>
+                                    <Button onClick={handleUpdateProduct}>수정</Button>
+                                    <Button danger onClick={handleDeleteProduct}>삭제</Button>
+                                </Space>
+                            )}
+                        </Space>
+                        <Divider style={{ margin: '12px 0' }} />
+                            <br/>
+                        <div>
+                            <Comment />
+                        </div>
+                    </Space>
+                </Col>
             </Row>
-
-            <div>{Product[0].writer._id === user?.authSuccess?.data?._id ?   (
-                <>
-                    <Button onClick={handleUpdateProduct}>수정</Button>
-                    <Button onClick={handleDeleteProduct}>삭제</Button>
-                    
-                </>
-            )
-                :
-                <div> 수정/삭제 권한이 없습니다. 작성자만 수정/삭제 할 수 있어용 </div>
-            }
-            </div>
-        </div >
+        </div>
     )
 }
 

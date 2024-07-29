@@ -1,4 +1,3 @@
-const { kMaxLength } = require("buffer");
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema;
 
@@ -24,17 +23,6 @@ const productSchema = mongoose.Schema({
         default: []
     },
 })
-
-productSchema.index({
-    title: 'text',
-    description: 'text'
-},
-    {
-        weights: {
-            name: 5,
-            description: 1
-        } 
-    })
 
 const Product = mongoose.model('Product', productSchema);
 

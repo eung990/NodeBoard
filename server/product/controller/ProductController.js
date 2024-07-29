@@ -50,8 +50,8 @@ const input = {
     updateProduct: async (req, res) => {
         try {
             console.log("======req.body======", req.body);
-            await Product.updateOne({_id: req.body._id},{$set:{title: req.body.title, description: req.body.description,continents: req.body.continents, images: req.body.images}});
-            
+            await Product.updateOne({ _id: req.body._id }, { $set: { title: req.body.title, description: req.body.description, continents: req.body.continents, images: req.body.images } });
+
             return res.status(200).json({ success: true });
         } catch (err) {
             console.error(err);
@@ -59,14 +59,72 @@ const input = {
         }
     },
 
+    // getProduct: async (req, res) => {
+    //     try {
+    //         let order = req.body.order ? req.body.order : "desc";
+    //         let sortBy = req.body.sortBy ? req.body.sortBy : "_id";
+    //         let limit = req.body.limit ? parseInt(req.body.limit) : 100;
+    //         let skip = parseInt(req.body.skip);
+    //         let term = req.body.searchTerm;
+    
+    //         let query = {};
+    
+    //         if (term) {
+    //             query = {
+    //                 $or: [
+    //                     { title: { $regex: term, $options: 'i' } },
+    //                     { description: { $regex: term, $options: 'i' } }
+    //                 ]
+    //             };
+    //         }
+    
+    //         const products = await Product.find(query)
+    //             .populate("writer")
+    //             .sort([[sortBy, order]])
+    //             .skip(skip)
+    //             .limit(limit);
+    
+    //         console.log("======products======", products);
+    //         res.status(200).json({ success: true, products, postSize: products.length });
+    
+    //     } catch (err) {
+    //         console.error(err);
+    //         res.status(500).json({ success: false, error: err.message });
+    //     }
+    // },
+
     getProduct: async (req, res) => {
         try {
-            const products = await Product.find();
-            console.log("======products======", products)
-            return res.status(200).json({ success: true, products });
+            const { searchTerm, order = "desc", sortBy = "_id", limit = 100, skip = 0 } = req.body;
+            
+            let query = {};
+            if (searchTerm) {
+                //RegExp 객체 생성: JavaScript의 내장 클래스로, 정규 표현식 객체를 생성합니다.
+                // 문자열 패턴을 검색하고 매칭하는 데 사용됩니다.
+                const regex = new RegExp(searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+                query = {
+                    $or: [
+                        { title: regex },
+                        { description: regex  }
+                    ]
+                };
+            }
+    
+            const products = await Product.find(query)
+                .populate("writer")
+                .sort([[sortBy, order]])
+                .skip(Number(skip))
+                .limit(Number(limit));
+    
+            res.status(200).json({ 
+                success: true, 
+                products, 
+                postSize: products.length 
+            });
+    
         } catch (err) {
             console.error(err);
-            return res.status(500).json({ success: false, error: err.message });
+            res.status(500).json({ success: false, error: err.message });
         }
     },
 
@@ -83,7 +141,7 @@ const input = {
                 return item
             })
         }
-    
+
         try {
             // {_id:{&in:id}}에서 in 연산자는 배열 안의 값과 일치하는 값을 찾는다.
             const product = await Product.find({ _id: { $in: id } })
