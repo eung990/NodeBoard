@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../../_actions/user_actions';
 import { useNavigate } from 'react-router-dom';
-import { Typography, Button, Form, message, Input, Icon } from 'antd';
+import {  Button, Form, Input } from 'antd';
 
 
 function LoginPage(props) {

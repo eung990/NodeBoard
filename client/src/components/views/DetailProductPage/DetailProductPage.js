@@ -19,7 +19,7 @@ function DetailProductPage(props) {
     const [Product, setProduct] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
  
-    console.log("=====Product==", Product)
+    console.log("=====productId==", productId)
     console.log("=====user?.authSuccess?.data?._id==", user?.authSuccess?.data?._id)
     useEffect(() => {
         axios.get(`/api/product/products_by_id?id=${productId}&type=single`)
@@ -38,14 +38,16 @@ function DetailProductPage(props) {
     if (isLoading) {
         return <div>Loading...</div>;
         
-    }const handleUpdateProduct = () => {
-        console.log("===handleUpdateProduct==")
-        navigate(`/product/update/${Product._id}`)
+    }
+    
+    const handleUpdateProduct = () => {
+        console.log("====Product._id 파람으로 보내는 중==", Product[0].writer._id)
+        navigate(`/product/update/${productId}`)
     }
 
     const handleDeleteProduct = () => {
         console.log("===handleDeleteProduct==")
-        axios.delete(`/api/product/delete_product?id=${productId}`)
+        axios.delete(`/api/product/delete_product?id=${Product[0].writer._id}`)
             .then(response => {
                 console.log("===response.data.product==", response.data.product);
                 navigate('/')
@@ -69,7 +71,7 @@ function DetailProductPage(props) {
 
             </Row>
 
-            <div>{Product[0].writer._id === user.authSuccess.data._id ? (
+            <div>{Product[0].writer._id === user?.authSuccess?.data?._id ?   (
                 <>
                     <Button onClick={handleUpdateProduct}>수정</Button>
                     <Button onClick={handleDeleteProduct}>삭제</Button>

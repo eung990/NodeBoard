@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate,useParams } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Typography, Button, Form, Input } from 'antd';
 import FileUpload from "../../../utils/FileUpload";
@@ -34,19 +34,29 @@ function EditProductPage() {
     const [ContinentValue, setInfo] = useState(1);
     const [Images, setImages] = useState([])
 
+    var resImages = useRef([]);
+
 
     useEffect(() => {
         axios.get(`/api/product/products_by_id?id=${productId}&type=single`)
             .then(response => {
-                setTitle(response.data.title)
-                setDescription(response.data.description)
-                setInfo(response.data.continents)
-                //setImages(response.data.images)
-                console.log('==response.data:',response.data);
+                const res = response.data.product[0]
+                setTitle(res.title)
+                setDescription(res.description)
+                setInfo(res.continents)
+                setImages(res.images)
+                console.log('====수정페이지 -> 서버에 요청해서 받은 데이터 :', res);
+                console.log('====setTitle :',res.title);
+                console.log('====setDescription :', res.description);
+                console.log('====setInfo :', res.continents);
+                console.log('====res.images :', res.images);         
+                resImages.current = res.images
+                console.log('====resImages :', resImages); 
+
             }).catch(err => {
-                console.log("=====EditError",err)
+                console.log("=====EditError", err)
             })
-    })
+    }, [productId])
     const onTitleHandler = (event) => {
 
         setTitle(event.currentTarget.value)
@@ -72,13 +82,14 @@ function EditProductPage() {
 
     const onSubmit = (event) => {
         event.preventDefault();
-  
+
 
         if (!TitleValue || !DescriptionValue ||
             !ContinentValue || !Images) {
             return alert('fill all the fields first!')
         }
         const variables = {
+            _id: productId,
             writer: user.authSuccess.data._id,
             title: TitleValue,
             description: DescriptionValue,
@@ -87,13 +98,13 @@ function EditProductPage() {
         }
 
 
-        axios.post('/api/product/uploadProduct', variables)
+        axios.post('/api/product/updateProduct', variables)
             .then(response => {
                 if (response.data.success) {
-                    alert('Product Successfully Uploaded')
+                    alert('Product Successfully Updated')
                     navigate('/')
                 } else {
-                    alert('Failed to upload Product')
+                    alert('Failed to update Product')
                 }
             })
 
@@ -108,7 +119,7 @@ function EditProductPage() {
             <Form  >
 
                 {/* DropZone */}
-                <FileUpload refreshFunction={updateImages} />
+                <FileUpload refreshFunction={updateImages} initialImages={resImages} />
                 <br />
                 <br />
                 <label>Title</label>

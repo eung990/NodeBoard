@@ -47,6 +47,18 @@ const input = {
         }
     },
 
+    updateProduct: async (req, res) => {
+        try {
+            console.log("======req.body======", req.body);
+            await Product.updateOne({_id: req.body._id},{$set:{title: req.body.title, description: req.body.description,continents: req.body.continents, images: req.body.images}});
+            
+            return res.status(200).json({ success: true });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ success: false, error: err.message });
+        }
+    },
+
     getProduct: async (req, res) => {
         try {
             const products = await Product.find();

@@ -7,6 +7,8 @@ router.post("/uploadImage",auth, CTRL.input.uploadImage);
 
 router.post("/uploadProduct",auth, CTRL.input.uploadProduct);
 
+router.post("/updateProduct",auth, CTRL.input.updateProduct);
+
 // router.get("/getProduct",auth, CTRL.input.getProduct);
 
 router.get("/getProduct", CTRL.input.getProduct);

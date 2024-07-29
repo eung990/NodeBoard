@@ -29,8 +29,9 @@ function App() {
           <Route path="/login" element={newLoginPage} />
           <Route path="/signUp" element={newSignUpPage} />
           <Route path="/product/upload" element={newUploadProductPage} />
-          <Route path="/product/:productId" element={newDetailProductPage} />
           <Route path="/product/update/:productId" element={newEditProductPage} />
+          <Route path="/product/:productId" element={newDetailProductPage} />
+
         </Routes>
       </div>
     </BrowserRouter>
