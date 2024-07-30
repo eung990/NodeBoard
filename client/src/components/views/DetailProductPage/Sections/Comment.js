@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import SingleComment from './SingleComment'
 
 function Comment(props) {
   const [Text, setText] = useState("")
@@ -39,6 +40,7 @@ function Comment(props) {
       <p> reply </p>
       <hr />
       {/* Comments Lists */}
+      <SingleComment />
 
       {/* Root Comments Form */}
 

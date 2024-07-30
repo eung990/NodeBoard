@@ -5,6 +5,7 @@ import { Row, Col, Button, Typography, Space, Divider, } from 'antd'
 import ProductImage from './Sections/ProductImage'
 import ProductInfo from './Sections/ProductInfo'
 import Comment from './Sections/Comment'
+
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { LeftOutlined } from '@ant-design/icons';
@@ -109,6 +110,11 @@ function DetailProductPage(props) {
                             )}
                         </Space>
                         <Divider style={{ margin: '12px 0' }} />
+
+                        <div>
+                            
+
+                        </div>
                         <br />
                         <div>
                             <Comment detail={Product} />
