@@ -8,6 +8,7 @@ const config = require('./server/config/key.js');
 const cookieParser = require("cookie-parser");
 const API_USERS = require("./server/router/UserRouter.js")
 const API_PRODUCT =require('./server/router/ProductRouter.js')
+const API_COMMENT =require('./server/router/CommentRouter.js')
 //const cors = require('cors');
 
 app.use(express.json());
@@ -44,6 +45,7 @@ app.use(express.static(`${__dirname}/public`));
 // api/users 경로로 들어오는 요청을 ./server/router/UserRouter.js 경로로 다 처리하겠다
 app.use('/api/users',API_USERS )
 app.use('/api/product',API_PRODUCT )
+app.use('/api/comment',API_COMMENT )
 //app.use("/", ROUTES_HOME);
 app.use('/product/ImageUpload', express.static('ImageUpload'));
 app.use('/ImageUpload', express.static('ImageUpload'));

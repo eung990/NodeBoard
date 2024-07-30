@@ -109,9 +109,9 @@ function DetailProductPage(props) {
                             )}
                         </Space>
                         <Divider style={{ margin: '12px 0' }} />
-                            <br/>
+                        <br />
                         <div>
-                            <Comment />
+                            <Comment detail={Product} />
                         </div>
                     </Space>
                 </Col>
