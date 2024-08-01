@@ -13,6 +13,18 @@ const input = {
         if(!response) return res.status(404).json({success:false, err})
         res.status(200).json({success:true, response})
         
+    },
+
+    getComment: async (req, res) => {
+        const comment = await Comment.find({productId : req.body.productId})
+        .populate('writer')
+
+        if(comment){
+            res.status(200).json({success:true, comment})
+        }else{
+            res.status(404).json({success:false, err})
+        }
+        
     }
 
 }

@@ -19,6 +19,7 @@ function DetailProductPage(props) {
 
     const [Product, setProduct] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [Comment, setComment] = useState([]);
 
     useEffect(() => {
         axios.get(`/api/product/products_by_id?id=${productId}&type=single`)
@@ -29,7 +30,18 @@ function DetailProductPage(props) {
             .catch(error => {
                 console.log(error);
                 setIsLoading(false);
+
             })
+
+         axios.post('/api/comments/getComment',productId)
+         .then(response => {
+            if(response.data.success){
+                console.log(response.data);
+                setComment(response.data.comment)
+            }else{
+                alert('Failed to get Comments')
+            }
+         })   
     }, [productId]);
 
     if (isLoading) {

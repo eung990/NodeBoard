@@ -10,7 +10,7 @@ const CommentSchema = mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'Product'
     },
-    replyId: {
+    responseTo: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
