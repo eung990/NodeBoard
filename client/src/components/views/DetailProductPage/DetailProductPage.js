@@ -19,7 +19,7 @@ function DetailProductPage(props) {
 
     const [Product, setProduct] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [Comment, setComment] = useState([]);
+    const [Comments, setComments] = useState([]);
 
     useEffect(() => {
         axios.get(`/api/product/products_by_id?id=${productId}&type=single`)
@@ -33,20 +33,21 @@ function DetailProductPage(props) {
 
             })
 
-         axios.post('/api/comments/getComment',productId)
-         .then(response => {
-            if(response.data.success){
-                console.log(response.data);
-                setComment(response.data.comment)
-            }else{
-                alert('Failed to get Comments')
-            }
-         })   
+        axios.get(`/api/comment/getComment?productId=${productId}`)
+            .then(response => {
+                if (response.data.success) {
+                    console.log("====response.data.comments", response.data.comments);
+                    setComments(response.data.comments)
+                } else {
+                    alert('Failed to get Comments')
+                }
+            })
     }, [productId]);
 
     if (isLoading) {
         return <div>Loading...</div>;
     }
+
 
 
     const handleGoBack = () => {
@@ -68,6 +69,11 @@ function DetailProductPage(props) {
             .catch(error => {
                 console.log(error);
             })
+    }
+
+
+    const refreshComments = (UpdateComments) => {
+        setComments(Comments.concat(UpdateComments))
     }
 
     return (
@@ -97,7 +103,7 @@ function DetailProductPage(props) {
                         <Divider style={{ margin: '12px 0' }} />
 
                         <div>
-                            <Title level={4}>강사 이력</Title>
+                            <Title level={4}>내용</Title>
                             <Paragraph>
                                 {Product[0]?.description}
                             </Paragraph>
@@ -114,7 +120,7 @@ function DetailProductPage(props) {
 
                         <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                             <Button icon={<LeftOutlined />} onClick={handleGoBack}>뒤로가기</Button>
-                            {Product[0].writer._id === user?.authSuccess?.data?._id && (
+                            {(Product[0].writer._id === user?.authSuccess?.data?._id || user?.authSuccess?.data?.role === "admin") &&(
                                 <Space>
                                     <Button onClick={handleUpdateProduct}>수정</Button>
                                     <Button danger onClick={handleDeleteProduct}>삭제</Button>
@@ -124,12 +130,14 @@ function DetailProductPage(props) {
                         <Divider style={{ margin: '12px 0' }} />
 
                         <div>
-                            
+
 
                         </div>
                         <br />
                         <div>
-                            <Comment detail={Product} />
+                            <Comment refreshComments={refreshComments}
+                                commentList={Comments}
+                                detail={Product} />
                         </div>
                     </Space>
                 </Col>

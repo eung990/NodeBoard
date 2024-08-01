@@ -59,39 +59,6 @@ const input = {
         }
     },
 
-    // getProduct: async (req, res) => {
-    //     try {
-    //         let order = req.body.order ? req.body.order : "desc";
-    //         let sortBy = req.body.sortBy ? req.body.sortBy : "_id";
-    //         let limit = req.body.limit ? parseInt(req.body.limit) : 100;
-    //         let skip = parseInt(req.body.skip);
-    //         let term = req.body.searchTerm;
-    
-    //         let query = {};
-    
-    //         if (term) {
-    //             query = {
-    //                 $or: [
-    //                     { title: { $regex: term, $options: 'i' } },
-    //                     { description: { $regex: term, $options: 'i' } }
-    //                 ]
-    //             };
-    //         }
-    
-    //         const products = await Product.find(query)
-    //             .populate("writer")
-    //             .sort([[sortBy, order]])
-    //             .skip(skip)
-    //             .limit(limit);
-    
-    //         console.log("======products======", products);
-    //         res.status(200).json({ success: true, products, postSize: products.length });
-    
-    //     } catch (err) {
-    //         console.error(err);
-    //         res.status(500).json({ success: false, error: err.message });
-    //     }
-    // },
 
     getProduct: async (req, res) => {
         try {

@@ -1,30 +1,28 @@
-const { model } = require("mongoose")
-const {Comment} = require("../model/CommentModel")
+const { Comment } = require("../model/CommentModel")
 
 const input = {
 
     uploadComment: async (req, res) => {
         const comment = new Comment(req.body)
-         await comment.save()
+        await comment.save()
 
-         const response = await Comment.find({_id:comment._id})
-        .populate('writer')
+        const resComment = await Comment.find({ _id: comment._id })
+            .populate('writer')
+            console.log('====SigleComments response: ',resComment)
+        if (!resComment) return res.status(404).json({ success: false, err })
+        res.status(200).json({ success: true, resComment })
 
-        if(!response) return res.status(404).json({success:false, err})
-        res.status(200).json({success:true, response})
-        
     },
 
     getComment: async (req, res) => {
-        const comment = await Comment.find({productId : req.body.productId})
-        .populate('writer')
-
-        if(comment){
-            res.status(200).json({success:true, comment})
-        }else{
-            res.status(404).json({success:false, err})
+        const { productId } = req.query;
+        try {
+            const comments = await Comment.find({ productId }).populate('writer');
+            console.log("====getComment APi: ",comments)
+            res.status(200).json({ success: true, comments });
+        } catch (err) {
+            res.status(400).json({ success: false, error: err.message });
         }
-        
     }
 
 }

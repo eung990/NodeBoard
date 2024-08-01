@@ -134,7 +134,7 @@ function StartPage() {
 
             {Products.length === 0 ?
                 <div style={{ display: 'flex', height: '300px', justifyContent: 'center', alignItems: 'center' }}>
-                    <h2>로그인 후 이용해주세요</h2>
+                    <h2>글이 없어요..</h2>
                     <br />
 
 

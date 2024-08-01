@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import SingleComment from './SingleComment'
+import ReplyComment from './ReplyComment';
 
 function Comment(props) {
   const [Text, setText] = useState("")
@@ -10,7 +11,12 @@ function Comment(props) {
   const user = useSelector(state => state.user)
 
   const InputText = (event) => {
-    setText(event.target.value);
+    if (user.authSuccess.data.isAuth) {
+      setText(event.target.value);
+    }else{
+      alert("로그인 후 이용할 수 있습니다")
+    }
+
 
   }
 
@@ -27,6 +33,8 @@ function Comment(props) {
       if (!response.data.success) {
         alert("Comment 컨트롤러에서 받아온 값이 없습니다.")
       } else {
+        setText("");
+        props.refreshComments(response.data.resComment)
         console.log("Comment 컨트롤러에서 받아온 값: ", response.data)
       }
 
@@ -40,7 +48,19 @@ function Comment(props) {
       <p> reply </p>
       <hr />
       {/* Comments Lists */}
-      <SingleComment />
+      {props.commentList && props.commentList.map((comment) => (
+        (!comment.responseTo &&
+          <React.Fragment>
+            <SingleComment refreshComments={props.refreshComments} commentList={comment} />
+            <ReplyComment refreshComments={props.refreshComments} parentCommentId={comment._id} commentList={props.commentList} />
+          </React.Fragment>)
+
+
+      ))}
+
+
+
+      <br />
 
       {/* Root Comments Form */}
 

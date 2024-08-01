@@ -19,7 +19,7 @@ const CommentSchema = mongoose.Schema({
         default: ""
     },
    
-})
+},{ timestamps: true })
 
 const Comment = mongoose.model('Comment', CommentSchema);
 

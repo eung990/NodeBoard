@@ -50,7 +50,7 @@ function SignUpPage(props) {
       alert("회원가입 실패")
       console.log('=====SignUpSuccess.payload.success======= ' + SignUpSuccess.payload.success + ' ============')
     } else {
-      navigate("/LoginPage");
+      navigate("/login");
       console.log("회원가입을 축하드립니다")
     }
 
@@ -72,10 +72,10 @@ function SignUpPage(props) {
         <Input type='email' value={Email} onChange={onEmailHandler} title="이메일 주소를 입력하세요">
         </Input>
         <label>Password</label>
-        <Input type='text' value={Password} onChange={onPasswordHandler} title="비밀번호를 입력하세요">
+        <Input type='password' value={Password} onChange={onPasswordHandler} title="비밀번호를 입력하세요">
         </Input>
         <label>ConfirmPassword</label>
-        <Input type='text' value={ConfirmPassword} onChange={onConfirmPasswordHandler} title="비밀번호 확인">
+        <Input type='password' value={ConfirmPassword} onChange={onConfirmPasswordHandler} title="비밀번호 확인">
         </Input>
         <br />
         <Button type="button" onClick={SignUpSubmitHandler} style={{ backgroundColor: '#8BC34A' }}>

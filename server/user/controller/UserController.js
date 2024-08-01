@@ -53,6 +53,13 @@ const input = {
       const isName = await User.findOne({ userName: req.body.userName });
       if (isName) return res.json({ success: false, message: "이미 존재하는 이름입니다" });
 
+      // 최초 회원가입자 확인 및 관리자 권한 부여
+      const userCount = await User.countDocuments();
+      if (userCount === 0) {
+        user.role = 'admin';
+        user.isAdmin = true;
+      }
+
       await user.save();
       return res.status(200).json({ success: true })
     } catch (err) {

@@ -32,9 +32,10 @@ const userSchema = mongoose.Schema({
         type: Boolean,
     },
     role: {
-        type: Number,
+        type: String,
+        enum: ['user', 'admin'],
         trim: true,
-        default:0
+        default: 'user'
     },
     image: String,
     token: {
@@ -44,19 +45,10 @@ const userSchema = mongoose.Schema({
         type: Number,
 
     },
-    createdAt: {
-        type: String,
-        trim: true,
-        default: mongoose.now
-    },
-    updatedAt: {
-        type: String,
-        trim: true,
-        default: mongoose.now
-    },
 
 
-})
+
+}, { timestamps: true })
 
 userSchema.pre('save', async function (next) {
 
@@ -133,17 +125,17 @@ userSchema.statics.findByToken = async function (token) {
 
         const decode = await jwt.verify(token, 'secretToken')
 
-        if(!decode){
+        if (!decode) {
             return console.log("error")
         }
-    
+
         const userInfo = await user.findOne({ "_id": decode, "token": token });
         console.log("=====userInfo=====" + userInfo + "==========");
         return userInfo;
-      } catch (err) {
+    } catch (err) {
         console.log("=====오류=====" + err + "==========");
         throw err; // 에러를 상위로 전파
-      }
+    }
 };
 
 
