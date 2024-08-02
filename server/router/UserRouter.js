@@ -13,5 +13,7 @@ router.get('/logout', auth, CTRL.input.loginOut)
 
 router.get('/auth', auth, CTRL.input.userAuth)
 
+router.get('/findUsers', CTRL.input.userAuth)
+
 
 module.exports = router;

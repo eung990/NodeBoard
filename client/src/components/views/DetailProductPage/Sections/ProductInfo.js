@@ -1,24 +1,18 @@
+import React from 'react';
+import { Descriptions, Card } from 'antd';
+import '../../../../css/ProductInfo.css';
 
-import React, { useEffect, useState } from 'react';
-import { Descriptions } from 'antd';
-
-function ProductInfo(props) {
-    const [ProductInfo, setProductInfo] = useState({});
-
-    useEffect(() => {
-        if (props.detail && props.detail.length > 0) { // props.detail이 존재하고 배열인지 확인
-            setProductInfo(props.detail[0]);
-        }
-    }, [props.detail]);
+function ProductInfo({ detail }) {
+    const productInfo = detail && detail.length > 0 ? detail[0] : {};
 
     return (
-        <div>
-            <Descriptions title={ProductInfo.title || "No Title"}> {/* 기본값 설정 */}
-                <Descriptions.Item label="Title">{ProductInfo.title || "N/A"}</Descriptions.Item>
-                <Descriptions.Item label="Description">{ProductInfo.description || "N/A"}</Descriptions.Item>
-                <Descriptions.Item label="Continents">{ProductInfo.continents || "N/A"}</Descriptions.Item>
+        <Card className="product-info-card">
+            <Descriptions title="상품 정보" bordered>
+                <Descriptions.Item label="제목">{productInfo.title || "N/A"}</Descriptions.Item>
+                <Descriptions.Item label="설명">{productInfo.description || "N/A"}</Descriptions.Item>
+                <Descriptions.Item label="대륙">{productInfo.continents || "N/A"}</Descriptions.Item>
             </Descriptions>
-        </div>
+        </Card>
     );
 }
 

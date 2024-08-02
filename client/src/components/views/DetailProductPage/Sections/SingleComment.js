@@ -1,98 +1,89 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Input } from 'antd';
-import { Comment } from '@ant-design/compatible';
+import { Avatar, Input, Button, message } from 'antd';
 import { useSelector } from 'react-redux';
-
-
-
+import '../../../../css/SingleComment.css';
+import { Comment } from '@ant-design/compatible'
 const { TextArea } = Input;
 
 const SingleComment = (props) => {
-
-    console.log("====props.commentList: ", props.commentList)
-    const [OpenReply, setOpenReply] = useState(false)
+    const [openReply, setOpenReply] = useState(false)
     const user = useSelector(state => state.user)
-    const [Text, setText] = useState("")
-
+    const [text, setText] = useState("")
 
     const onClickReplyOpen = () => {
         if (user.authSuccess.data.isAuth) {
-            setOpenReply(!OpenReply)
+            setOpenReply(!openReply)
         } else {
-            alert("로그인 후 이용할 수 있습니다")
+            message.warning("로그인 후 이용할 수 있습니다")
         }
-
     }
 
     const onChangeText = (e) => {
         if (user.authSuccess.data.isAuth) {
             setText(e.target.value)
         } else {
-            alert("로그인 후 이용할 수 있습니다")
+            message.warning("로그인 후 이용할 수 있습니다")
         }
-
     }
 
     const onClickReply = async (e) => {
         e.preventDefault();
+        if (!text.trim()) {
+            return message.warning("댓글 내용을 입력해주세요.");
+        }
         try {
-            // console.log("===props.user====", props.user)
             const variables = {
-                content: Text,
+                content: text,
                 productId: props.commentList.productId,
                 writer: user.authSuccess.data._id,
                 responseTo: props.commentList._id
-
             }
 
             const response = await axios.post("/api/Comment/uploadComment", variables)
-            console.log('====SigleComments response: ', response)
-            if (!response.data.success) {
-                alert("Comment 컨트롤러에서 받아온 값이 없습니다.")
-            } else {
+            if (response.data.success) {
                 setText("");
+                setOpenReply(false);
                 props.refreshComments(response.data.resComment)
-                console.log("Comment 컨트롤러에서 받아온 값: ", response.data)
+                message.success("답글이 등록되었습니다.");
+            } else {
+                message.error("답글 등록에 실패했습니다.");
             }
-
         } catch (err) {
-            console.log("SingleComment 페이지 저장버튼 에러", err);
+            console.error("SingleComment 페이지 저장버튼 에러", err);
+            message.error("답글 등록 중 오류가 발생했습니다.");
         }
     }
 
     const actions = [
-        <span onClick={onClickReplyOpen} key="comment-nested-reply-to">답글 작성</span>
+        <span onClick={onClickReplyOpen} key="comment-nested-reply-to" className="reply-action">답글 작성</span>
     ]
+
     return (
-
-        <div>
-
-
+        <div className="single-comment">
             {props.commentList && props.commentList.writer && (
                 <Comment
                     actions={actions}
                     author={props.commentList.writer.userName || 'Unknown User'}
+                    avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="avatar" />}
                     content={props.commentList.content || 'No content'}
                 />
             )}
 
-            {OpenReply && <form style={{ display: 'flex' }}>
-                <TextArea
-                    style={{ width: '100%', borderRadius: '5px' }}
-                    onChange={onChangeText}
-                    value={Text}
-                    placeholder='댓글을 작성해주세요'
-                />
-                <br />
-                <button style={{ width: '20%', height: '52px' }} onClick={onClickReply}>
-                    작성
-                </button>
-            </form>}
-
+            {openReply &&
+                <form className="reply-form">
+                    <TextArea
+                        rows={4}
+                        onChange={onChangeText}
+                        value={text}
+                        placeholder='답글을 작성해주세요'
+                    />
+                    <Button type="primary" onClick={onClickReply} className="reply-button">
+                        작성
+                    </Button>
+                </form>
+            }
         </div>
-
-
     );
 };
 

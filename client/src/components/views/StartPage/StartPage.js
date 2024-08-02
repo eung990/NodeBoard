@@ -96,9 +96,9 @@ function StartPage() {
         getProduct(variables)
     }
 
-    const onLoginHandler = () => navigate("/login");
-    const onSignUpHandler = () => navigate("/signUp");
-    const onProductPageHandler = () => navigate("/product/upload");
+    // const onLoginHandler = () => navigate("/login");
+    // const onSignUpHandler = () => navigate("/signUp");
+    // const onProductPageHandler = () => navigate("/product/upload");
     const renderCards =
         Products.map((product, index) => {
             return (
@@ -119,7 +119,7 @@ function StartPage() {
 
         <div style={{ width: '75%', margin: '3rem auto' }}>
             <div style={{ textAlign: 'center' }}>
-                <h2>심리상담사 <BulbOutlined  /></h2>
+                <h2>자유게시판 <BulbOutlined  /></h2>
             </div>
 
             {/* Search  */}
@@ -146,13 +146,13 @@ function StartPage() {
                     </Row>
                 </div>
             }
-            <div>
+            {/* <div>
                 <Button onClick={onLoginHandler}>Login</Button>
                 <Button onClick={onSignUpHandler}>Sign Up</Button>
                 <Button onClick={onLogoutHandler}>Logout</Button>
                 <Button onClick={onProductPageHandler}>Upload Product</Button>
 
-            </div>
+            </div> */}
             <br />
 
             {PostSize >= Limit && <div style={{ display: 'flex', justifyContent: 'center' }}>

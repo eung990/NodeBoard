@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import SingleComment from './SingleComment'
-import { Divider } from 'antd'
+import { Divider, Button } from 'antd'
+import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
+import '../../../../css/ReplyComment.css'
 
 function ReplyComment(props) {
-    console.log("====props.commentList 리플 페이지 : ", props.commentList)
-    console.log("==== props.parentCommentId 리플 페이지 : ", props.parentCommentId)
+    const [childCommentNumber, setChildCommentNumber] = useState(0)
+    const [openReplyComments, setOpenReplyComments] = useState(false)
 
-    const [ChildCommentNumber, setChildCommentNumber] = useState(0)
-    const [OpenReplyComments, setOpenReplyComments] = useState(false)
     useEffect(() => {
         let commentNumber = 0;
         props.commentList.forEach((comment) => {
@@ -18,11 +18,10 @@ function ReplyComment(props) {
         setChildCommentNumber(commentNumber);
     }, [props.commentList, props.parentCommentId]);
 
-
-    let renderReplyComment = (parentCommentId) =>
+    const renderReplyComment = (parentCommentId) =>
         props.commentList.map((comment, index) => (
             comment.responseTo === parentCommentId &&
-            <div key={index} style={{ width: '80%', marginLeft: '40px' }}>
+            <div key={index} className="reply-comment">
                 <SingleComment refreshComments={props.refreshComments} commentList={comment} />
                 <ReplyComment
                     refreshComments={props.refreshComments}
@@ -31,23 +30,30 @@ function ReplyComment(props) {
                 />
             </div>
         ));
+
     const handleChange = () => {
-        setOpenReplyComments(!OpenReplyComments)
+        setOpenReplyComments(!openReplyComments)
     }
+
     return (
         <div>
-            <Divider style={{ margin: '12px 0' }} />
-            {ChildCommentNumber > 0 &&
-                <p style={{ fontSize: '14px', margin: 0, color: 'gray' }}
-                    onClick={handleChange} >
-                    답글 {ChildCommentNumber}개
-                </p>
+            <Divider className="reply-divider" />
+            {childCommentNumber > 0 &&
+                <Button 
+                    type="link" 
+                    onClick={handleChange}
+                    icon={openReplyComments ? <CaretUpOutlined /> : <CaretDownOutlined />}
+                    className="view-replies-button"
+                >
+                    답글 {childCommentNumber}개 {openReplyComments ? '숨기기' : '보기'}
+                </Button>
             }
 
-            {OpenReplyComments &&
-                renderReplyComment(props.parentCommentId)
+            {openReplyComments &&
+                <div className="reply-comments-container">
+                    {renderReplyComment(props.parentCommentId)}
+                </div>
             }
-
         </div>
     )
 }

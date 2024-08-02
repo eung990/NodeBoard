@@ -8,7 +8,8 @@ import { applyMiddleware,createStore } from 'redux';
 import promiseMiddleware from 'redux-promise';
 import {thunk} from 'redux-thunk';
 import Reducer from './_reducers'
-
+import './App.css';
+import 'antd/dist/reset.css';
 
 // 미들웨어(promiseMiddleware, thunk)와 함께 설정되어 있어 비동기 작업 처리 가능
 const createStoreWithMiddleware = applyMiddleware(promiseMiddleware,thunk)(createStore)
@@ -33,30 +34,3 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-// import React from 'react';
-// import ReactDOM from 'react-dom/client';
-// import './index.css';
-// import App from './App';
-// import reportWebVitals from './reportWebVitals';
-// import { Provider } from 'react-redux'
-// import { configureStore } from '@reduxjs/toolkit';
-// import {thunk} from 'redux-thunk';
-// import Reducer from './_reducers'
-
-// const store = configureStore({
-//   reducer: Reducer,
-//   middleware: (getDefaultMiddleware) => 
-//     getDefaultMiddleware().concat(thunk),
-//   devTools: process.env.NODE_ENV !== 'production',
-// })
-
-// const root = ReactDOM.createRoot(document.getElementById('root'));
-// root.render(
-//   <React.StrictMode>
-//     <Provider store={store}>
-//       <App />
-//     </Provider>
-//   </React.StrictMode>
-// );
-
-// reportWebVitals();

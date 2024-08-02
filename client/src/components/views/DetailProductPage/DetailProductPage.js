@@ -1,147 +1,94 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Row, Col, Button, Typography, Space, Divider, } from 'antd'
+import { useParams, useNavigate } from 'react-router-dom'
+import { Row, Col, Button, Typography, Space, Divider, Spin, Card } from 'antd'
+import { LeftOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import ProductImage from './Sections/ProductImage'
 import ProductInfo from './Sections/ProductInfo'
-import Comment from './Sections/Comment'
+import CommentPage from './Sections/CommentPage'
+import { useSelector } from 'react-redux'
+import axios from 'axios'
+import '../../../css/Detail.css'
 
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { LeftOutlined } from '@ant-design/icons';
+const { Title, Paragraph } = Typography
 
-const { Title, Paragraph } = Typography;
-
-function DetailProductPage(props) {
-    const { productId } = useParams();
-    const navigate = useNavigate();
-    const user = useSelector(state => state.user);
-
-    const [Product, setProduct] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [Comments, setComments] = useState([]);
+function DetailProductPage() {
+    const { productId } = useParams()
+    const navigate = useNavigate()
+    const user = useSelector(state => state.user)
+    const [product, setProduct] = useState(null)
+    const [comments, setComments] = useState([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        axios.get(`/api/product/products_by_id?id=${productId}&type=single`)
-            .then(response => {
-                setProduct(response.data.product);
-                setIsLoading(false);
-            })
-            .catch(error => {
-                console.log(error);
-                setIsLoading(false);
+        const fetchData = async () => {
+            try {
+                const [productRes, commentsRes] = await Promise.all([
+                    axios.get(`/api/product/products_by_id?id=${productId}&type=single`),
+                    axios.get(`/api/comment/getComment?productId=${productId}`)
+                ])
+                setProduct(productRes.data.product[0])
+                setComments(commentsRes.data.comments)
+            } catch (error) {
+                console.error("Error fetching data:", error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchData()
+    }, [productId])
 
-            })
-
-        axios.get(`/api/comment/getComment?productId=${productId}`)
-            .then(response => {
-                if (response.data.success) {
-                    console.log("====response.data.comments", response.data.comments);
-                    setComments(response.data.comments)
-                } else {
-                    alert('Failed to get Comments')
-                }
-            })
-    }, [productId]);
-
-    if (isLoading) {
-        return <div>Loading...</div>;
+    const handleGoBack = () => navigate(-1)
+    const handleUpdateProduct = () => navigate(`/product/update/${productId}`)
+    const handleDeleteProduct = async () => {
+        try {
+            await axios.delete(`/api/product/delete_product?id=${productId}`)
+            navigate('/')
+        } catch (error) {
+            console.error("Error deleting product:", error)
+        }
     }
 
+    const refreshComments = (newComment) => setComments(comments.concat(newComment))
 
-
-    const handleGoBack = () => {
-        navigate(-1); // 이전 페이지로 이동
-    }
-
-    const handleUpdateProduct = () => {
-        navigate(`/product/update/${productId}`)
-    }
-
-
-    const handleDeleteProduct = () => {
-        console.log("===handleDeleteProduct==")
-        axios.delete(`/api/product/delete_product?id=${productId}`)
-            .then(response => {
-                console.log("===제품 ID==", productId);
-                navigate('/')
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }
-
-
-    const refreshComments = (UpdateComments) => {
-        setComments(Comments.concat(UpdateComments))
-    }
+    if (loading) return <Spin size="large" className="loading-spinner" />
 
     return (
-        <div className='product_detail_page' style={{
-            width: '100%',
-            padding: '1rem',
-            backgroundColor: '#ffffff'
-        }}>
-            <Row gutter={[16, 16]}>
-                <Col xs={24} sm={24} md={12}>
-                    <div style={{
-                        borderRadius: '8px',
-                        overflow: 'hidden',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                    }}>
-                        <ProductImage detail={Product} />
-                    </div>
-                </Col>
-                <Col xs={24} sm={24} md={12}>
-                    <Space direction="vertical" size="large" style={{ display: 'flex', width: '100%' }}>
-                        <div>
-                            <Title level={3} style={{ marginBottom: '0.25rem' }}>
-                                {Product[0]?.title}</Title>
-
-                        </div>
-
-                        <Divider style={{ margin: '12px 0' }} />
-
-                        <div>
-                            <Title level={4}>내용</Title>
-                            <Paragraph>
-                                {Product[0]?.description}
-                            </Paragraph>
-                        </div>
-
-                        <Divider style={{ margin: '12px 0' }} />
-
-                        <div>
-                            <Title level={5}>한 눈에 보기</Title>
-
-                        </div>
-
-                        <ProductInfo detail={Product} />
-
-                        <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-                            <Button icon={<LeftOutlined />} onClick={handleGoBack}>뒤로가기</Button>
-                            {(Product[0].writer._id === user?.authSuccess?.data?._id || user?.authSuccess?.data?.role === "admin") &&(
-                                <Space>
-                                    <Button onClick={handleUpdateProduct}>수정</Button>
-                                    <Button danger onClick={handleDeleteProduct}>삭제</Button>
-                                </Space>
-                            )}
+        <div className='product-detail-page'>
+            <Card className="product-card">
+                <Row gutter={[16, 16]}>
+                    <Col xs={24} md={12}>
+                        <ProductImage detail={[product]} />
+                    </Col>
+                    <Col xs={24} md={12}>
+                        <Space direction="vertical" size="large" style={{ width: '100%' }}>
+                            <Title level={3}>{product?.title}</Title>
+                            <Divider />
+                            <div>
+                                <Title level={4}>내용</Title>
+                                <Paragraph>{product?.description}</Paragraph>
+                            </div>
+                            <Divider />
+                            <ProductInfo detail={[product]} />
+                            <Space className="action-buttons">
+                                <Button icon={<LeftOutlined />} onClick={handleGoBack}>뒤로가기</Button>
+                                {(product?.writer._id === user?.authSuccess?.data?._id || user?.authSuccess?.data?.role === "admin") && (
+                                    <>
+                                        <Button icon={<EditOutlined />} onClick={handleUpdateProduct}>수정</Button>
+                                        <Button danger icon={<DeleteOutlined />} onClick={handleDeleteProduct}>삭제</Button>
+                                    </>
+                                )}
+                            </Space>
                         </Space>
-                        <Divider style={{ margin: '12px 0' }} />
-
-                        <div>
-
-
-                        </div>
-                        <br />
-                        <div>
-                            <Comment refreshComments={refreshComments}
-                                commentList={Comments}
-                                detail={Product} />
-                        </div>
-                    </Space>
-                </Col>
-            </Row>
+                    </Col>
+                </Row>
+            </Card>
+            <Card className="comments-card">
+                <CommentPage
+                    refreshComments={refreshComments}
+                    commentList={comments}
+                    productId={productId}
+                />
+            </Card>
         </div>
     )
 }

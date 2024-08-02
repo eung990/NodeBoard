@@ -1,127 +1,110 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import Continents from '../../../utils/Continents';
-import { Typography, Button, Form, Input } from 'antd';
+import { Typography, Button, Form, Input, Select, message, Card } from 'antd';
+import { UploadOutlined, SaveOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import FileUpload from "../../../utils/FileUpload";
-
 import axios from "axios";
+import '../../../css/UploadProductPage.css';
 
 const { Title } = Typography;
 const { TextArea } = Input;
-
-
+const { Option } = Select;
 
 function UploadProductPage(props) {
-
     const navigate = useNavigate();
-    console.log('props:', props);
-    const [TitleValue, setTitle] = useState("");
-    const [DescriptionValue, setDescription] = useState("");
-    const [ContinentValue, setInfo] = useState(1);
-    const [Images, setImages] = useState([])
-
-
-    const onTitleHandler = (event) => {
-
-        setTitle(event.currentTarget.value)
-
-    }
-
-    const onDescriptionHandler = (event) => {
-        setDescription(event.currentTarget.value)
-
-    }
+    const [form] = Form.useForm();
+    const [images, setImages] = useState([]);
 
     const updateImages = (newImages) => {
-        setImages(newImages)
+        setImages(newImages);
     }
 
-    const onInfoHandler = (event) => {
-        setInfo(event.currentTarget.value)
-    }
-
-    const onBackHandler = (event) => {
-        navigate('/')
-    }
-
-    const onSubmit = (event) => {
-        event.preventDefault();
-        console.log('ContinentValue:', ContinentValue);
-        console.log('authSuccess:', props.authSuccess);
-
-        if (!TitleValue || !DescriptionValue ||
-            !ContinentValue || !Images) {
-            return alert('fill all the fields first!')
+    const onFinish = (values) => {
+        if (images.length === 0) {
+            return message.error('Please upload at least one image!');
         }
+
         const variables = {
             writer: props.user.authSuccess.data._id,
-            title: TitleValue,
-            description: DescriptionValue,
-            images: Images,
-            continents: ContinentValue,
+            title: values.title,
+            description: values.description,
+            images: images,
+            continents: values.continent,
         }
-
 
         axios.post('/api/product/uploadProduct', variables)
             .then(response => {
                 if (response.data.success) {
-                    alert('Product Successfully Uploaded')
-                    navigate('/')
+                    message.success('Product Successfully Uploaded');
+                    navigate('/');
                 } else {
-                    alert('Failed to upload Product')
+                    message.error('Failed to upload Product');
                 }
             })
-
     }
 
     return (
-        <div style={{ maxWidth: '700px', margin: '2rem auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                <Title level={2}> Upload Travel Product</Title>
-            </div>
+        <div className="upload-product-container">
+            <Card className="upload-product-card">
+                <Title level={2} className="upload-product-title">
+                    <UploadOutlined /> Upload Travel Product
+                </Title>
 
-            <Form  >
+                <Form
+                    form={form}
+                    layout="vertical"
+                    onFinish={onFinish}
+                    className="upload-product-form"
+                >
+                    <Form.Item
+                        name="images"
+                        label="Images"
+                       
+                    >
+                        <FileUpload refreshFunction={updateImages} />
+                    </Form.Item>
 
-                {/* DropZone */}
-                <FileUpload refreshFunction={updateImages} />
-                <br />
-                <br />
-                <label>Title</label>
-                <Input
-                    onChange={onTitleHandler}
-                    value={TitleValue} />
+                    <Form.Item
+                        name="title"
+                        label="Title"
+                        rules={[{ required: true, message: 'Please input the title!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
 
-                <br />
-                <br />
-                <label>Description</label>
-                <TextArea
-                    onChange={onDescriptionHandler}
-                    value={DescriptionValue} />
+                    <Form.Item
+                        name="description"
+                        label="Description"
+                        rules={[{ required: true, message: 'Please input the description!' }]}
+                    >
+                        <TextArea rows={4} />
+                    </Form.Item>
 
-                <br />
-                <br />
-                <label>Info</label>
-                <select onChange={onInfoHandler}>
-                    {Continents.map(item => (
-                        <option key={item.key} value={item.value}>{item.value}</option>
-                    ))}
-                </select>
+                    <Form.Item
+                        name="continent"
+                        label="Continent"
+                        rules={[{ required: true, message: 'Please select a continent!' }]}
+                    >
+                        <Select>
+                            {Continents.map(item => (
+                                <Option key={item.key} value={item.value}>{item.value}</Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
 
-
-
-                <br />
-                <br />
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
-                    <Button type="button" onClick={onBackHandler} style={{ backgroundColor: '#d6d6d6' }}>취소</Button>
-                    <Button type="button" onClick={onSubmit} style={{ backgroundColor: '#8BC34A' }}>저장</Button>
-                </div>
-
-
-            </Form>
-
+                    <Form.Item className="upload-product-buttons">
+                        <Button type="default" onClick={() => navigate('/')} icon={<ArrowLeftOutlined />}>
+                            Cancel
+                        </Button>
+                        <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
+                            Save
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Card>
         </div>
-
     )
 }
 
-export default UploadProductPage
+export default UploadProductPage;

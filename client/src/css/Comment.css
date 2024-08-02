@@ -1,0 +1,58 @@
+.comment-section {
+    margin-top: 20px;
+    transition: all 0.3s ease;
+  }
+  
+  .comment-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .comments-list {
+    max-height: 500px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+  }
+  
+  .no-comments {
+    text-align: center;
+    color: #888;
+  }
+  
+  .comment-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .submit-button {
+    align-self: flex-end;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+  }
+  
+  .submit-button:hover {
+    transform: translateY(-2px);
+  }
+  
+  @media (max-width: 768px) {
+    .comment-section {
+      margin-top: 10px;
+    }
+  
+    .comment-title {
+      font-size: 1rem;
+    }
+  
+    .submit-button {
+      width: 100%;
+    }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .comment-section {
+    animation: fadeIn 0.5s ease-out;
+  }

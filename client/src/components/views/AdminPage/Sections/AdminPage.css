@@ -1,0 +1,40 @@
+.admin-layout {
+    min-height: 100vh;
+  }
+  
+  .admin-header {
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .admin-content {
+    margin: 24px 16px;
+    padding: 24px;
+    background: #fff;
+    min-height: 280px;
+  }
+  
+  .edit-button,
+  .delete-button {
+    transition: all 0.3s ease;
+  }
+  
+  .edit-button:hover,
+  .delete-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .edit-button:active,
+  .delete-button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (max-width: 768px) {
+    .admin-content {
+      margin: 16px 8px;
+      padding: 16px;
+    }
+  }

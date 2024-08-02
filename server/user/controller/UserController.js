@@ -97,6 +97,20 @@ const input = {
       role: req.user.role,
 
     })
+  },
+
+  findUsers: async (req, res) => {
+    try {
+      const users = await User.find()
+      if (!users) {
+        res.status(400).json({ success: false })
+      }
+
+      res.status(200).json({ success: true, users })
+    } catch (err) {
+      res.status(404).json({ success: false })
+    }
+
   }
 }
 
