@@ -7,25 +7,21 @@ import axios from 'axios';
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
-// 더미 데이터
-const dummyUsers = [
-  { _id: '1', name: '김철수', email: 'chulsoo@example.com', createdAt: '2023-01-15T09:00:00.000Z' },
-  { _id: '2', name: '이영희', email: 'younghee@example.com', createdAt: '2023-02-20T10:30:00.000Z' },
-  { _id: '3', name: '박민준', email: 'minjun@example.com', createdAt: '2023-03-10T14:15:00.000Z' },
-  { _id: '4', name: '정수연', email: 'suyeon@example.com', createdAt: '2023-04-05T11:45:00.000Z' },
-  { _id: '5', name: '강지원', email: 'jiwon@example.com', createdAt: '2023-05-22T16:20:00.000Z' },
-];
-
 function AdminPage() {
-  const [users, setUsers] = useState(dummyUsers);
-
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/users/findUsers')
+    axios.get('/api/users/findAllUsers')
     .then(res => {
-
+      if(res.data.success) {
+        console.log(res.data.users);
+        setUsers(res.data.users);
+      } else {
+        message.error('사용자 정보를 불러오는데 실패했습니다.');
+      }
     })
-  })
+  }, []) // 빈 배열을 넣어 마운트 시에만 실행되도록 수정
+
   const handleEdit = (userId) => {
     message.info(`사용자 ID ${userId}의 정보를 수정합니다.`);
   };
@@ -34,6 +30,13 @@ function AdminPage() {
     setUsers(users.filter(user => user._id !== userId));
     message.success('사용자가 삭제되었습니다.');
   };
+
+  const usersList = users.map((user) => ({
+    key: user._id,
+    name: user.userName,
+    email: user.email,
+    createdAt: new Date(user.createdAt).toLocaleDateString(),
+  }));
 
   const columns = [
     {
@@ -50,7 +53,6 @@ function AdminPage() {
       title: '가입일',
       dataIndex: 'createdAt',
       key: 'createdAt',
-      render: (text) => new Date(text).toLocaleDateString(),
     },
     {
       title: '작업',
@@ -60,7 +62,7 @@ function AdminPage() {
           <Button
             type="primary"
             icon={<EditOutlined />}
-            onClick={() => handleEdit(record._id)}
+            onClick={() => handleEdit(record.key)}
             className="edit-button"
           >
             수정
@@ -69,7 +71,7 @@ function AdminPage() {
             type="primary"
             danger
             icon={<DeleteOutlined />}
-            onClick={() => handleDelete(record._id)}
+            onClick={() => handleDelete(record.key)}
             className="delete-button"
           >
             삭제
@@ -90,8 +92,8 @@ function AdminPage() {
         <Title level={4}>회원 목록</Title>
         <Table
           columns={columns}
-          dataSource={users}
-          rowKey="_id"
+          dataSource={usersList}
+          rowKey="key"
         />
       </Content>
     </Layout>

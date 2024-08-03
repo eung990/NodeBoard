@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  Route,
-  Routes,
-  BrowserRouter
-} from "react-router-dom";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
 import Auth from "./hoc/hoc"
 import NavBar from "./components/views/NavBar/NavBar";
 import StartPage from "./components/views/StartPage/StartPage";
@@ -15,13 +11,13 @@ import EditProductPage from "./components/views/EditProductPage/EditProductPage"
 import AdminPage from "./components/views/AdminPage/AdminPage";
 
 function App() {
-  const newStartPage = Auth(StartPage, null);
-  const newLoginPage = Auth(LoginPage, false);
-  const newSignUpPage = Auth(SignUpPage, false);
-  const newUploadProductPage = Auth(UploadProductPage, true);
-  const newDetailProductPage = Auth(DetailProductPage, null);
-  const newEditProductPage = Auth(EditProductPage, true);
-  const newAdminPage = Auth(AdminPage, true, );
+  const AuthStartPage = Auth(StartPage, null);
+  const AuthLoginPage = Auth(LoginPage, false);
+  const AuthSignUpPage = Auth(SignUpPage, false);
+  const AuthUploadProductPage = Auth(UploadProductPage, true);
+  const AuthDetailProductPage = Auth(DetailProductPage, null);
+  const AuthEditProductPage = Auth(EditProductPage, true);
+  const AuthAdminPage = Auth(AdminPage, true, true);  // 관리자 전용 페이지
 
   return (
     <BrowserRouter>
@@ -29,13 +25,13 @@ function App() {
         <NavBar />
         <div className="content">
           <Routes>
-            <Route path="/" element={newStartPage} />
-            <Route path="/login" element={newLoginPage} />
-            <Route path="/signUp" element={newSignUpPage} />
-            <Route path="/admin" element={newAdminPage} />
-            <Route path="/product/upload" element={newUploadProductPage} />
-            <Route path="/product/update/:productId" element={newEditProductPage} />
-            <Route path="/product/:productId" element={newDetailProductPage} />
+            <Route path="/" element={<AuthStartPage />} />
+            <Route path="/login" element={<AuthLoginPage />} />
+            <Route path="/signUp" element={<AuthSignUpPage />} />
+            <Route path="/admin" element={<AuthAdminPage />} />
+            <Route path="/product/upload" element={<AuthUploadProductPage />} />
+            <Route path="/product/update/:productId" element={<AuthEditProductPage />} />
+            <Route path="/product/:productId" element={<AuthDetailProductPage />} />
           </Routes>
         </div>
       </div>

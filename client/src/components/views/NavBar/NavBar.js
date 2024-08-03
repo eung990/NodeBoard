@@ -4,9 +4,11 @@ import { Drawer, Button } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 import './Sections/NavBar.css';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 function NavBar() {
   const [visible, setVisible] = useState(false);
+  const user = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const showDrawer = () => {
@@ -16,19 +18,43 @@ function NavBar() {
   const onClose = () => {
     setVisible(false);
   };
+
   const onLogoutHandler = async () => {
     try {
-        const res = await axios.get("/api/users/logout");
-        if (res.data.success) {
-            navigate("/login");
-            console.log("로그아웃 완료");
-        } else {
-            console.log("로그아웃 실패");
-        }
+      const res = await axios.get("/api/users/logout");
+      if (res.data.success) {
+        navigate("/login");
+        console.log("로그아웃 완료");
+      } else {
+        console.log("로그아웃 실패");
+      }
     } catch (error) {
-        console.error("로그아웃 중 오류 발생", error);
+      console.error("로그아웃 중 오류 발생", error);
     }
-}
+  }
+
+  const isAuthenticated = user.authSuccess?.data?.isAuth;
+  const isAdmin = user.authSuccess?.data?.role === 'admin';
+
+  const renderMenuItems = () => (
+    <>
+      <Link to="/" onClick={onClose}>Home</Link>
+      {!isAuthenticated && (
+        <>
+          <Link to="/login" onClick={onClose}>Login</Link>
+          <Link to="/signUp" onClick={onClose}>Sign Up</Link>
+        </>
+      )}
+      {isAuthenticated && (
+        <>
+          <Link to="/product/upload" onClick={onClose}>Upload</Link>
+          <Link onClick={onLogoutHandler}>Logout</Link>
+        </>
+      )}
+      {isAdmin && <Link to="/admin" onClick={onClose}>Admin</Link>}
+    </>
+  );
+
   return (
     <nav className="navbar">
       <div className="navbar-logo">
@@ -36,12 +62,7 @@ function NavBar() {
       </div>
       <div className="navbar-menu">
         <div className="navbar-menu-desktop">
-
-          <Link to="/login">Login</Link>
-          <Link to="/signUp">Sign Up</Link>
-          <Link onClick={onLogoutHandler}>logout</Link>
-          <Link to="/product/upload">Upload</Link>
-          <Link to="/admin">Admin</Link>
+          {renderMenuItems()}
         </div>
         <Button className="navbar-menu-mobile" onClick={showDrawer}>
           <MenuOutlined />
@@ -51,14 +72,9 @@ function NavBar() {
           placement="right"
           closable={false}
           onClose={onClose}
-          visible={visible}
+          open={visible}
         >
-          <Link to="/" onClick={onClose}>Home</Link>
-          <Link onClick={onLogoutHandler}>logout</Link>
-          <Link to="/login" onClick={onClose}>Login</Link>
-          <Link to="/signUp" onClick={onClose}>Sign Up</Link>
-          <Link to="/product/upload" onClick={onClose}>Upload</Link>
-          <Link to="/admin" onClick={onClose}>Admin</Link>
+          {renderMenuItems()}
         </Drawer>
       </div>
     </nav>

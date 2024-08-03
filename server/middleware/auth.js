@@ -27,6 +27,33 @@ let auth = async (req, res, next) => {
 
 }
 
+let admin = async (req, res, next) => {
+    let token = req.cookies.x_auth; // 클라이언트 토큰 가져오는 거
+    console.log("====token=====", token);
+
+    try {
+        const user = await User.findByToken(token) //토큰 가지고 디코드 한 후 그 값으로 해당 유저 찾음 
+
+        if (!user) {
+            return res.status(401).json({ isAdmin: false, error: true, message: "인증 실패: 사용자를 찾을 수 없습니다." });
+        }
+
+        req.token = token;
+
+        if (user.role === 'admin') {
+            req.user = user;
+            req.role = user.role;
+            next();
+        } else {
+            return res.status(403).json({ isAdmin: false, error: true, message: "접근 권한이 없습니다: 관리자만 접근 가능합니다." });
+        }
+    } catch (err) {
+        console.log("===auth.js==오류=====", err);
+        return res.status(500).json({ isAdmin: false, error: true, message: "서버 오류가 발생했습니다." });
+    }
+}
+
 module.exports = {
     auth,
+    admin
 };
