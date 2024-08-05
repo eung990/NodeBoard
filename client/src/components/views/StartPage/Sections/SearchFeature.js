@@ -19,7 +19,7 @@ function SearchFeature(props) {
             <Search
                 value={SearchTerms}
                 onChange={onChangeSearch}
-                placeholder="검색할 데이터를 입력하세요"
+                placeholder="검색할 내용을 입력하세요"
             />
         </div>
     )

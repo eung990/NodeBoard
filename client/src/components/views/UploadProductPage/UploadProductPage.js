@@ -21,9 +21,9 @@ function UploadProductPage(props) {
     }
 
     const onFinish = (values) => {
-        if (images.length === 0) {
-            return message.error('Please upload at least one image!');
-        }
+        // if (images.length === 0) {
+        //     return message.error('Please upload at least one image!');
+        // }
 
         const variables = {
             writer: props.user.authSuccess.data._id,
@@ -36,10 +36,10 @@ function UploadProductPage(props) {
         axios.post('/api/product/uploadProduct', variables)
             .then(response => {
                 if (response.data.success) {
-                    message.success('Product Successfully Uploaded');
+                    message.success('업로드 성공');
                     navigate('/');
                 } else {
-                    message.error('Failed to upload Product');
+                    message.error('업로드 실패');
                 }
             })
     }
@@ -59,7 +59,7 @@ function UploadProductPage(props) {
                 >
                     <Form.Item
                         name="images"
-                        label="Images"
+                        label="사진"
                        
                     >
                         <FileUpload refreshFunction={updateImages} />
@@ -67,24 +67,24 @@ function UploadProductPage(props) {
 
                     <Form.Item
                         name="title"
-                        label="Title"
-                        rules={[{ required: true, message: 'Please input the title!' }]}
+                        label="제목"
+                        rules={[{ required: true, message: '제목을 입력해주세요!' }]}
                     >
                         <Input />
                     </Form.Item>
 
                     <Form.Item
                         name="description"
-                        label="Description"
-                        rules={[{ required: true, message: 'Please input the description!' }]}
+                        label="내용"
+                        rules={[{ required: true, message: '내용을 입력해주세요!' }]}
                     >
                         <TextArea rows={4} />
                     </Form.Item>
 
                     <Form.Item
                         name="continent"
-                        label="Continent"
-                        rules={[{ required: true, message: 'Please select a continent!' }]}
+                        label="카테고리"
+                        rules={[{ required: true, message: '카테고리를 선택해주세요!' }]}
                     >
                         <Select>
                             {Continents.map(item => (
@@ -95,10 +95,10 @@ function UploadProductPage(props) {
 
                     <Form.Item className="upload-product-buttons">
                         <Button type="default" onClick={() => navigate('/')} icon={<ArrowLeftOutlined />}>
-                            Cancel
+                            취소
                         </Button>
                         <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
-                            Save
+                            저장
                         </Button>
                     </Form.Item>
                 </Form>

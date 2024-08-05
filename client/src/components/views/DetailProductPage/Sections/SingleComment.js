@@ -65,7 +65,7 @@ const SingleComment = (props) => {
                 <Comment
                     actions={actions}
                     author={props.commentList.writer.userName || 'Unknown User'}
-                    avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="avatar" />}
+                   
                     content={props.commentList.content || 'No content'}
                 />
             )}

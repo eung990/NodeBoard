@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Button, Col, Card, Row } from 'antd';
-import { BulbOutlined } from '@ant-design/icons';
+import { Button, Col, Card, Row, Typography } from 'antd';
+import { BulbOutlined, LoadingOutlined } from '@ant-design/icons';
 import ImageSlider from '../../../utils/ImageSlider';
 import SearchFeature from './Sections/SearchFeature';
 
-
 const { Meta } = Card;
+const { Title } = Typography;
+
 
 function StartPage() {
     const [Products, setProducts] = useState([]);
@@ -119,7 +120,7 @@ function StartPage() {
 
         <div style={{ width: '75%', margin: '3rem auto' }}>
             <div style={{ textAlign: 'center' }}>
-                <h2>자유게시판 <BulbOutlined  /></h2>
+                <h2>포토그래퍼 <BulbOutlined /></h2>
             </div>
 
             {/* Search  */}
@@ -132,27 +133,17 @@ function StartPage() {
             </div>
 
 
-            {Products.length === 0 ?
-                <div style={{ display: 'flex', height: '300px', justifyContent: 'center', alignItems: 'center' }}>
-                    <h2>글이 없어요..</h2>
-                    <br />
-
-
+            {Products.length === 0 ? (
+                <div style={{ display: 'flex', height: '300px', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+                    <LoadingOutlined style={{ fontSize: 24, marginBottom: '1rem' }} spin />
+                    <Title level={3}>불러올 글이 없습니다 새로 작성해주세요...</Title>
                 </div>
-                :
-                <div>
-                    <Row gutter={[16, 16]}>
-                        {renderCards}
-                    </Row>
-                </div>
-            }
-            {/* <div>
-                <Button onClick={onLoginHandler}>Login</Button>
-                <Button onClick={onSignUpHandler}>Sign Up</Button>
-                <Button onClick={onLogoutHandler}>Logout</Button>
-                <Button onClick={onProductPageHandler}>Upload Product</Button>
+            ) : (
+                <Row gutter={[16, 16]}>
+                    {renderCards}
+                </Row>
+            )}
 
-            </div> */}
             <br />
 
             {PostSize >= Limit && <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -166,3 +157,5 @@ function StartPage() {
 }
 
 export default StartPage;
+
+

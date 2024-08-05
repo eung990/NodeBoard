@@ -62,10 +62,10 @@ function EditProductPage() {
         axios.post('/api/product/updateProduct', variables)
             .then(response => {
                 if (response.data.success) {
-                    message.success('Product Successfully Updated');
+                    message.success('업데이트 완료');
                     navigate('/');
                 } else {
-                    message.error('Failed to update Product');
+                    message.error('업데이트 실패');
                 }
             });
     };
@@ -85,31 +85,31 @@ function EditProductPage() {
                 >
                     <Form.Item
                         name="images"
-                        label="Images"
+                        label="사진"
                     >
                         <FileUpload refreshFunction={updateImages} initialImages={Images} />
                     </Form.Item>
 
                     <Form.Item
                         name="title"
-                        label="Title"
-                        rules={[{ required: true, message: 'Please input the title!' }]}
+                        label="제목"
+                        rules={[{ required: true, message: '제목을 입력해주세요!' }]}
                     >
                         <Input />
                     </Form.Item>
 
                     <Form.Item
                         name="description"
-                        label="Description"
-                        rules={[{ required: true, message: 'Please input the description!' }]}
+                        label="내용"
+                        rules={[{ required: true, message: '내용을 입력해주세요!' }]}
                     >
                         <TextArea rows={4} />
                     </Form.Item>
 
                     <Form.Item
                         name="continent"
-                        label="Continent"
-                        rules={[{ required: true, message: 'Please select a continent!' }]}
+                        label="카테고리"
+                        rules={[{ required: true, message: '카테고리를 선택해주세요!' }]}
                     >
                         <Select>
                             {Continents.map(item => (

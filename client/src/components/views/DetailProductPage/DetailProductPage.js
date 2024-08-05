@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Row, Col, Button, Typography, Space, Divider, Spin, Card } from 'antd'
+import { Row, Col, Button, Typography, Space, Divider, Spin, Card, Tag } from 'antd'
 import { LeftOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import ProductImage from './Sections/ProductImage'
-import ProductInfo from './Sections/ProductInfo'
 import CommentPage from './Sections/CommentPage'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import '../../../css/Detail.css'
 
-const { Title, Paragraph } = Typography
+const { Title, Paragraph, Text } = Typography
 
 function DetailProductPage() {
     const { productId } = useParams()
@@ -62,18 +61,21 @@ function DetailProductPage() {
                     <Col xs={24} md={12}>
                         <Space direction="vertical" size="large" style={{ width: '100%' }}>
                             <Title level={3}>{product?.title}</Title>
+                            <Space>
+                                <Tag color="blue">{product?.category}</Tag>
+                                <Text type="secondary">작성자: {product?.writer.userName}</Text>
+                            </Space>
                             <Divider />
-                            <div>
+                            <div style={{ minHeight: '200px' }}>
                                 <Title level={4}>내용</Title>
                                 <Paragraph>{product?.description}</Paragraph>
                             </div>
                             <Divider />
-                            <ProductInfo detail={[product]} />
                             <Space className="action-buttons">
                                 <Button icon={<LeftOutlined />} onClick={handleGoBack}>뒤로가기</Button>
                                 {(product?.writer._id === user?.authSuccess?.data?._id || user?.authSuccess?.data?.role === "admin") && (
                                     <>
-                                        <Button icon={<EditOutlined />} onClick={handleUpdateProduct}>수정</Button>
+                                        <Button icon={<EditOutlined />} onClick={handleUpdateProduct} style={{ marginRight: '8px' }}>수정</Button>
                                         <Button danger icon={<DeleteOutlined />} onClick={handleDeleteProduct}>삭제</Button>
                                     </>
                                 )}
@@ -83,11 +85,15 @@ function DetailProductPage() {
                 </Row>
             </Card>
             <Card className="comments-card">
-                <CommentPage
-                    refreshComments={refreshComments}
-                    commentList={comments}
-                    productId={productId}
-                />
+                {user?.authSuccess?.data?.isAuth ? (
+                    <CommentPage
+                        refreshComments={refreshComments}
+                        commentList={comments}
+                        productId={productId}
+                    />
+                ) : (
+                    <div>로그인 후 이용할 수 있어용..</div>
+                )}
             </Card>
         </div>
     )

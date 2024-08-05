@@ -101,16 +101,38 @@ const input = {
 
   findAllUsers: async (req, res) => {
     try {
-      const users = await User.find()
-      if (!users) {
-        res.status(400).json({ success: false })
-      }
-      console.log(users);
-      res.status(200).json({ success: true, users })
-    } catch (err) {
-      res.status(404).json({ success: false })
-    }
+      //페이지번호
+      const page = parseInt(req.query.page) || 1;
+      //한 페이지당 표시할 항목 수
+      const limit = parseInt(req.query.limit) || 5;
+      const skip = (page - 1) * limit;
 
+      const users = await User.find().skip(skip).limit(limit);
+      const total = await User.countDocuments();
+
+      if (!users) {
+        return res.status(400).json({ success: false });
+      }
+
+      res.status(200).json({
+        success: true,
+        users,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page
+      });
+    } catch (err) {
+      res.status(404).json({ success: false, error: err.message });
+    }
+  },
+  deleteUser: async (req, res) => {
+    try {
+      console.log('====req.query.userId: ', req.query.userId)
+      await User.findByIdAndDelete(req.query.userId);
+      return res.status(200).json({ success: true });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ success: false, error: err.message });
+    }
   }
 }
 
