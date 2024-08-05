@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Col, Card, Row, Typography } from 'antd';
-import { BulbOutlined, LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined, CameraOutlined } from '@ant-design/icons';
 import ImageSlider from '../../../utils/ImageSlider';
 import SearchFeature from './Sections/SearchFeature';
 
@@ -23,7 +22,7 @@ function StartPage() {
     })
 
 
-    const navigate = useNavigate();
+
 
     useEffect(() => {
         const variables = {
@@ -68,19 +67,6 @@ function StartPage() {
         setSkip(skip);
     }
 
-    const onLogoutHandler = async () => {
-        try {
-            const res = await axios.get("/api/users/logout");
-            if (res.data.success) {
-                navigate("/login");
-                console.log("로그아웃 완료");
-            } else {
-                console.log("로그아웃 실패");
-            }
-        } catch (error) {
-            console.error("로그아웃 중 오류 발생", error);
-        }
-    }
 
     const updateSearchTerms = (newSearchTerm) => {
 
@@ -97,9 +83,6 @@ function StartPage() {
         getProduct(variables)
     }
 
-    // const onLoginHandler = () => navigate("/login");
-    // const onSignUpHandler = () => navigate("/signUp");
-    // const onProductPageHandler = () => navigate("/product/upload");
     const renderCards =
         Products.map((product, index) => {
             return (
@@ -120,7 +103,10 @@ function StartPage() {
 
         <div style={{ width: '75%', margin: '3rem auto' }}>
             <div style={{ textAlign: 'center' }}>
-                <h2>포토그래퍼 <BulbOutlined /></h2>
+                <h2>SnapShot <CameraOutlined /></h2>
+                <h4>
+                    순간을 기록해보세요
+                </h4>
             </div>
 
             {/* Search  */}

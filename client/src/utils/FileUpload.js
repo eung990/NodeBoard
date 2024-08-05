@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Dropzone from 'react-dropzone';
-import {UploadOutlined} from '@ant-design/icons'
+import { UploadOutlined } from '@ant-design/icons'
 import axios from 'axios';
 function FileUpload(props) {
 
@@ -14,25 +14,21 @@ function FileUpload(props) {
     }, [props.initialImages]);
 
     const onDrop = (files) => {
-
-
         let formData = new FormData();
         const config = {
             header: { 'content-type': 'multipart/form-data' }
         }
-        formData.append("file", files[0])
-        //save the Image we chose inside the Node Server 
+        files.forEach(file => {
+            formData.append("files", file)
+        });
         axios.post('/api/product/uploadImage', formData, config)
             .then(response => {
                 if (response.data.success) {
-                    const imagePath = response.data.image.replace(/\\/g, '/');
-                    console.log("===response.data.image====", response.data.image)
-                    setImages([...Images, imagePath])
-                    console.log("===Images====", Images)
-                    props.refreshFunction([...Images, imagePath])
-
+                    const newImages = response.data.images.map(img => img.path);
+                    setImages(prevImages => [...prevImages, ...newImages]);
+                    props.refreshFunction([...Images, ...newImages]);
                 } else {
-                    alert('Failed to save the Image in Server')
+                    alert('Failed to save the Images in Server')
                 }
             })
     }
@@ -55,7 +51,7 @@ function FileUpload(props) {
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Dropzone
                 onDrop={onDrop}
-                multiple={false}
+                multiple={true}
                 maxSize={800000000}
             >
                 {({ getRootProps, getInputProps }) => (
@@ -68,7 +64,7 @@ function FileUpload(props) {
                         {console.log('getRootProps', { ...getRootProps() })}
                         {console.log('getInputProps', { ...getInputProps() })}
                         <input {...getInputProps()} />
-                        <UploadOutlined  type="plus" style={{ fontSize: '8rem' }} />
+                        <UploadOutlined type="plus" style={{ fontSize: '8rem' }} />
 
                     </div>
                 )}

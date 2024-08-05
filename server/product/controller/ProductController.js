@@ -18,7 +18,7 @@ var storage = multer.diskStorage({
     },
 })
 
-var upload = multer({ storage: storage }).single("file")
+var upload = multer({ storage: storage }).array("files", 5) // 최대 5개 파일 허용
 
 const input = {
 
@@ -31,7 +31,11 @@ const input = {
             if (!fs.existsSync(ImageUpload)) {
                 fs.mkdirSync(ImageUpload);
             }
-            return res.json({ success: true, image: res.req.file.path, fileName: res.req.file.filename })
+            const uploadedFiles = req.files.map(file => ({
+                path: file.path.replace(/\\/g, '/'),
+                filename: file.filename
+            }));
+            return res.json({ success: true, images: uploadedFiles })
         })
     },
 

@@ -1,16 +1,21 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "background_color": "#ffffff",
+  "description": "SnapShot - 순간을 기록하세요",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "SnapShot",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "SnapShot",
+  "start_url": "/",
+  "theme_color": "#1a2a3a",
+  "categories": ["photo"],
+  "display_override": ["standalone", "window-controls-overlay"],
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "/SnapShot512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
-
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  ]
 }

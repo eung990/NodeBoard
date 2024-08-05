@@ -120,10 +120,10 @@ function EditProductPage() {
 
                     <Form.Item className="upload-product-buttons">
                         <Button type="default" onClick={() => navigate('/')} icon={<ArrowLeftOutlined />}>
-                            Cancel
+                            취소
                         </Button>
                         <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
-                            Update
+                            업데이트
                         </Button>
                     </Form.Item>
                 </Form>
