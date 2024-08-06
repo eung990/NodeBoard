@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Row, Col, Button, Typography, Space, Divider, Spin, Card, Tag } from 'antd'
-import { LeftOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { LeftOutlined, EditOutlined, DeleteOutlined, TagOutlined, UserOutlined } from '@ant-design/icons'
 import ProductImage from './Sections/ProductImage'
 import CommentPage from './Sections/CommentPage'
 import { useSelector } from 'react-redux'
@@ -9,6 +9,7 @@ import axios from 'axios'
 import '../../../css/Detail.css'
 
 const { Title, Paragraph, Text } = Typography
+
 
 function DetailProductPage() {
     const { productId } = useParams()
@@ -53,30 +54,40 @@ function DetailProductPage() {
 
     return (
         <div className='product-detail-page'>
-            <Card className="product-card">
-                <Row gutter={[16, 16]}>
+            <Card className="product-card" bordered={false}>
+                <Row gutter={[32, 32]}>
                     <Col xs={24} md={12}>
                         <ProductImage detail={[product]} />
                     </Col>
                     <Col xs={24} md={12}>
                         <Space direction="vertical" size="large" style={{ width: '100%' }}>
-                            <Title level={3}>{product?.title}</Title>
-                            <Space>
-                                <Tag color="blue">{product?.category}</Tag>
-                                <Text type="secondary">작성자: {product?.writer.userName}</Text>
+                            <Title level={2}>{product?.title}</Title>
+                            <Space size={[0, 8]} wrap>
+                                <Tag icon={<TagOutlined />} color="blue">{product?.continents}</Tag>
+                                <Tag icon={<UserOutlined />} color="default">
+                                    작성자: {product?.writer.userName}
+                                </Tag>
                             </Space>
-                            <Divider />
+                            <Divider style={{ margin: '16px 0' }} />
                             <div style={{ minHeight: '200px' }}>
                                 <Title level={4}>내용</Title>
-                                <Paragraph>{product?.description}</Paragraph>
+                                <Paragraph style={{ fontSize: '16px', lineHeight: '1.6' }}>
+                                    {product?.description}
+                                </Paragraph>
                             </div>
-                            <Divider />
-                            <Space className="action-buttons">
-                                <Button icon={<LeftOutlined />} onClick={handleGoBack}>뒤로가기</Button>
+                            <Divider style={{ margin: '16px 0' }} />
+                            <Space className="action-buttons" wrap>
+                                <Button icon={<LeftOutlined />} onClick={handleGoBack}>
+                                    뒤로가기
+                                </Button>
                                 {(product?.writer._id === user?.authSuccess?.data?._id || user?.authSuccess?.data?.role === "admin") && (
                                     <>
-                                        <Button icon={<EditOutlined />} onClick={handleUpdateProduct} style={{ marginRight: '8px' }}>수정</Button>
-                                        <Button danger icon={<DeleteOutlined />} onClick={handleDeleteProduct}>삭제</Button>
+                                        <Button icon={<EditOutlined />} onClick={handleUpdateProduct} type="primary">
+                                            수정
+                                        </Button>
+                                        <Button danger icon={<DeleteOutlined />} onClick={handleDeleteProduct}>
+                                            삭제
+                                        </Button>
                                     </>
                                 )}
                             </Space>
@@ -84,7 +95,8 @@ function DetailProductPage() {
                     </Col>
                 </Row>
             </Card>
-            <Card className="comments-card">
+            <Card className="comments-card" bordered={false} style={{ marginTop: '24px' }}>
+                <Title level={4} style={{ marginBottom: '16px' }}>댓글</Title>
                 {user?.authSuccess?.data?.isAuth ? (
                     <CommentPage
                         refreshComments={refreshComments}
@@ -92,7 +104,9 @@ function DetailProductPage() {
                         productId={productId}
                     />
                 ) : (
-                    <div>로그인 후 이용할 수 있어용..</div>
+                    <div style={{ textAlign: 'center', padding: '24px', background: '#f0f2f5', borderRadius: '4px' }}>
+                        로그인 후 이용할 수 있습니다.
+                    </div>
                 )}
             </Card>
         </div>

@@ -10,6 +10,7 @@ import { thunk } from 'redux-thunk';
 import Reducer from './_reducers'
 import './App.css';
 import 'antd/dist/reset.css';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
 // 미들웨어(promiseMiddleware, thunk)와 함께 설정되어 있어 비동기 작업 처리 가능
 const createStoreWithMiddleware = applyMiddleware(promiseMiddleware, thunk)(createStore)
@@ -27,20 +28,9 @@ root.render(
   </Provider>
 );
 
-// Service Worker 등록
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/pwabuilder-sw.js')
-      .then(registration => {
-        console.log('Service Worker registered: ', registration);
-      })
-      .catch(registrationError => {
-        console.log('Service Worker registration failed: ', registrationError);
-      });
-  });
-}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+serviceWorkerRegistration.register();
 reportWebVitals();

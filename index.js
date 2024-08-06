@@ -9,7 +9,7 @@ const cookieParser = require("cookie-parser");
 const API_USERS = require("./server/router/UserRouter.js")
 const API_PRODUCT =require('./server/router/ProductRouter.js')
 const API_COMMENT =require('./server/router/CommentRouter.js')
-//const cors = require('cors');
+const path = require('path');
 
 app.use(express.json());
 //app.use(cors());
@@ -28,6 +28,7 @@ app.use(session({
 
 mongoose.connect(config.mongoURI)
   .then(() => {
+
     console.log("MongoDB Connected....")
   })
   .catch((err) => {
@@ -42,6 +43,13 @@ app.set("view engine", "ejs");
 
 app.use(express.static(`${__dirname}/public`));
 
+// app.use(express.static(path.join(__dirname, 'client/public'), {
+//   setHeaders: (res, path) => {
+//     if (path.endsWith('manifest.json')) {
+//       res.setHeader('Content-Type', 'application/manifest+json');
+//     }
+//   }
+// }));
 // api/users 경로로 들어오는 요청을 ./server/router/UserRouter.js 경로로 다 처리하겠다
 app.use('/api/users',API_USERS )
 app.use('/api/product',API_PRODUCT )
