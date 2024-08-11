@@ -28,7 +28,8 @@
   "scripts": {
     "start": "nodemon ./server/start/start.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"npm start \" \"npm start --prefix client\""
+    "dev": "concurrently \"npm start \" \"npm start --prefix client\"",
+    "pm2": "pm2 start ecosystem.config.js"
   },
   "author": "kimwan",
   "license": "ISC",

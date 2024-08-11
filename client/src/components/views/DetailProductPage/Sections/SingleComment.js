@@ -27,6 +27,10 @@ const SingleComment = (props) => {
         }
     }
 
+    const onDeleteComment = () => {
+        
+    }
+
     const onClickReply = async (e) => {
         e.preventDefault();
         if (!text.trim()) {

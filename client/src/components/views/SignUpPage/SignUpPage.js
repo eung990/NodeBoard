@@ -28,7 +28,7 @@ function SignUpPage(props) {
   const onConfirmPasswordHandler = (event) => {
     setConfirmPassword(event.currentTarget.value)
   }
-  const BackButtonHandler = (event) => {
+  const BackButtonHandler = () => {
     navigate("/")
   }
   const SignUpSubmitHandler = async (event) => {

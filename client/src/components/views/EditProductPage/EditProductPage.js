@@ -46,9 +46,7 @@ function EditProductPage() {
     };
 
     const onSubmit = (values) => {
-        if (Images.length === 0) {
-            return message.error('Please upload at least one image!');
-        }
+      
 
         const variables = {
             _id: productId,

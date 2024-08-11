@@ -55,7 +55,7 @@ app.use('/api/users',API_USERS )
 app.use('/api/product',API_PRODUCT )
 app.use('/api/comment',API_COMMENT )
 //app.use("/", ROUTES_HOME);
-app.use('/product/ImageUpload', express.static('ImageUpload'));
+// app.use('/api/product/ImageUpload', express.static('ImageUpload'));
 app.use('/ImageUpload', express.static('ImageUpload'));
 
 

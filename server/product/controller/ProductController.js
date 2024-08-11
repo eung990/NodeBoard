@@ -2,6 +2,8 @@ const { Product } = require('../model/ProductModel')
 const multer = require('multer')
 const fs = require('fs');
 const ImageUpload = "/ImageUpload"
+const path = require('path');
+
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {

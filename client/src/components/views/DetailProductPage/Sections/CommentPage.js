@@ -52,7 +52,7 @@ function CommentPage(props) {
 
   return (
     <Card className="comment-section">
-      <h3 className="comment-title">댓글</h3>
+      {/* <h3 className="comment-title">댓글</h3> */}
       <div className="comments-list">
         {props.commentList && props.commentList.length > 0 ? (
           props.commentList.map((comment) => (
