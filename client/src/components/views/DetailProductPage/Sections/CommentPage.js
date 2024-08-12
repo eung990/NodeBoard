@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Input, Button, Card, message } from 'antd';
@@ -7,7 +7,7 @@ import SingleComment from './SingleComment'
 import ReplyComment from './ReplyComment';
 import axios from 'axios';
 import '../../../../css/Comment.css';
-;
+
 
 const { TextArea } = Input;
 
@@ -15,6 +15,10 @@ function CommentPage(props) {
   const [text, setText] = useState("")
   const { productId } = useParams()
   const user = useSelector(state => state.user)
+
+  useEffect(() => {
+    props.refreshComments();
+  }, [props.refreshComments]);
 
   const handleInputChange = (event) => {
     if (user.authSuccess.data.isAuth) {
@@ -52,11 +56,10 @@ function CommentPage(props) {
 
   return (
     <Card className="comment-section">
-      {/* <h3 className="comment-title">댓글</h3> */}
       <div className="comments-list">
         {props.commentList && props.commentList.length > 0 ? (
           props.commentList.map((comment) => (
-            !comment.responseTo && (
+            comment && !comment.responseTo && (
               <React.Fragment key={comment._id}>
                 <SingleComment
                   refreshComments={props.refreshComments}
@@ -82,9 +85,9 @@ function CommentPage(props) {
           value={text}
           placeholder='댓글을 작성해주세요'
         />
-        <Button 
-          type="primary" 
-          icon={<SendOutlined />} 
+        <Button
+          type="primary"
+          icon={<SendOutlined />}
           onClick={onCommentsSave}
           className="submit-button"
         >
