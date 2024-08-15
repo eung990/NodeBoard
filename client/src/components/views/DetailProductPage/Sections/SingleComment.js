@@ -37,8 +37,9 @@ const SingleComment = (props) => {
         try {
             const response = await axios.delete(`/api/comment/deleteComment/${commentId}`);
             if (response.data.success) {
+                await props.refreshComments(); // 전체 댓글 목록을 새로고침
                 message.success("댓글과 관련 대댓글이 모두 삭제되었습니다.");
-                props.refreshComments(); // 전체 댓글 목록을 새로고침
+
             } else {
                 message.error("댓글 삭제에 실패했습니다.");
             }
@@ -65,7 +66,7 @@ const SingleComment = (props) => {
             if (response.data.success) {
                 setText("");
                 setOpenReply(false);
-                props.refreshComments(response.data.resComment)
+                await props.refreshComments()
                 message.success("답글이 등록되었습니다.");
             } else {
                 message.error("답글 등록에 실패했습니다.");

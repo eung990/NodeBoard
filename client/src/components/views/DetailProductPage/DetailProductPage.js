@@ -37,10 +37,14 @@ function DetailProductPage() {
         fetchData()
     }, [productId])
 
+
+
     const handleGoBack = () => navigate(-1)
     const handleUpdateProduct = () => navigate(`/product/update/${productId}`)
     const handleDeleteProduct = async () => {
         try {
+            const confirmDelete = window.confirm("이 게시글을 삭제하면 모든 관련 항목이 함께 삭제됩니다. 계속하시겠습니까?");
+            if (!confirmDelete) return;
             await axios.delete(`/api/product/delete_product?id=${productId}`)
             navigate('/')
         } catch (error) {
@@ -48,7 +52,15 @@ function DetailProductPage() {
         }
     }
 
-    const refreshComments = (newComment) => setComments(comments.concat(newComment))
+    const refreshComments = async () => {
+        try {
+            const response = await axios.get(`/api/comment/getComment?productId=${productId}`);
+            console.log("response.data.comments===", response.data.comments)
+            setComments(response.data.comments);
+        } catch (error) {
+            console.error("Error refreshing comments:", error);
+        }
+    };
 
     if (loading) return <Spin size="large" className="loading-spinner" />
 

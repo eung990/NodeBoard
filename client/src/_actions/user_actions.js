@@ -18,7 +18,7 @@ export function loginUser(bodyData) {
     }
 }
 
-export function SignUpUser(bodyData) {
+export function signUpUser(bodyData) {
     const res = axios.post("/api/users/signUp", bodyData)
         .then(res => res.data)
 

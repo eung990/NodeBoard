@@ -1,6 +1,8 @@
 const { Product } = require('../model/ProductModel')
+const { Comment } = require('../../comment/model/CommentModel')
 const multer = require('multer')
 const fs = require('fs');
+const fs2 = require('fs/promises');
 const ImageUpload = "/ImageUpload"
 const path = require('path');
 
@@ -19,6 +21,23 @@ var storage = multer.diskStorage({
         }
     },
 })
+
+// 이미지 파일 삭제 함수
+const deleteFile = async (filePath) => {
+    try {
+        // fs.promises.access 사용
+        await fs2.access(filePath);
+        await fs2.unlink(filePath);
+        console.log(`Successfully deleted file: ${filePath}`);
+    } catch (error) {
+        if (error.code === 'ENOENT') {
+            console.log(`File not found, skipping delete: ${filePath}`);
+        } else {
+            console.error(`Error deleting file: ${filePath}`, error);
+        }
+    }
+};
+
 
 var upload = multer({ storage: storage }).array("files", 5) // 최대 5개 파일 허용
 
@@ -69,7 +88,7 @@ const input = {
     getProduct: async (req, res) => {
         try {
             const { searchTerm, order = "desc", sortBy = "_id", limit = 100, skip = 0 } = req.body;
-            
+
             let query = {};
             if (searchTerm) {
                 //RegExp 객체 생성: JavaScript의 내장 클래스로, 정규 표현식 객체를 생성합니다.
@@ -78,23 +97,23 @@ const input = {
                 query = {
                     $or: [
                         { title: regex },
-                        { description: regex  }
+                        { description: regex }
                     ]
                 };
             }
-    
+
             const products = await Product.find(query)
                 .populate("writer")
                 .sort([[sortBy, order]])
                 .skip(Number(skip))
                 .limit(Number(limit));
-    
-            res.status(200).json({ 
-                success: true, 
-                products, 
-                postSize: products.length 
+
+            res.status(200).json({
+                success: true,
+                products,
+                postSize: products.length
             });
-    
+
         } catch (err) {
             console.error(err);
             res.status(500).json({ success: false, error: err.message });
@@ -129,6 +148,27 @@ const input = {
 
     deleteProduct: async (req, res) => {
         try {
+            let productId = req.query.id
+            const product = await Product.findById(productId);
+            const commentsByProductId = await Comment.find({ productId: productId });
+            if (!product) {
+                return res.status(404).json({ success: false, message: "Product not found" });
+            }
+
+            // 이미지 파일 삭제
+            if (product.images && product.images.length > 0) {
+                for (const image of product.images) {
+                    const imageName = image.replace('ImageUpload/','');
+                    const decodedImage = decodeURIComponent(imageName);
+                    const imagePath = path.join(__dirname, '..', '..','..', 'ImageUpload', decodedImage);
+                    await deleteFile(imagePath);
+                }
+            }
+
+            if(commentsByProductId){
+                await Comment.deleteMany({ productId: productId });
+            }
+
             await Product.findByIdAndDelete(req.query.id);
             return res.status(200).json({ success: true });
         } catch (err) {

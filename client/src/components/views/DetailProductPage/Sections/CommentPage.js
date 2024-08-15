@@ -16,9 +16,6 @@ function CommentPage(props) {
   const { productId } = useParams()
   const user = useSelector(state => state.user)
 
-  useEffect(() => {
-    props.refreshComments();
-  }, [props.refreshComments]);
 
   const handleInputChange = (event) => {
     if (user.authSuccess.data.isAuth) {
@@ -43,7 +40,7 @@ function CommentPage(props) {
       const response = await axios.post("/api/Comment/uploadComment", variables)
       if (response.data.success) {
         setText("");
-        props.refreshComments(response.data.resComment)
+        await props.refreshComments();
         message.success("댓글이 등록되었습니다.");
       } else {
         message.error("댓글 등록에 실패했습니다.");

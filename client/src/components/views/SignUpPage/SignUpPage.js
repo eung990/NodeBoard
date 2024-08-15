@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { SignUpUser } from '../../../_actions/user_actions';
+import { signUpUser } from '../../../_actions/user_actions';
 import { useNavigate } from 'react-router-dom';
-import { Typography, Button, Form, message, Input, Icon } from 'antd';
+import { Button, Form, Input } from 'antd';
 
 
 function SignUpPage(props) {
@@ -45,7 +45,7 @@ function SignUpPage(props) {
     }
 
 
-    var SignUpSuccess = await dispatch(SignUpUser(body))
+    var SignUpSuccess = await dispatch(signUpUser(body))
     if (!SignUpSuccess.payload.success) {
       alert("회원가입 실패")
       console.log('=====SignUpSuccess.payload.success======= ' + SignUpSuccess.payload.success + ' ============')
