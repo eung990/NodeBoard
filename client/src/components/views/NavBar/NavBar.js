@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Drawer, Button } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
@@ -10,6 +10,10 @@ function NavBar() {
   const [visible, setVisible] = useState(false);
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   console.log(user);
+  // }, [user]);
 
   const showDrawer = () => {
     setVisible(true);
