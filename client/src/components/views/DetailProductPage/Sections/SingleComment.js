@@ -78,7 +78,7 @@ const SingleComment = (props) => {
     }
 
     const isCommentAuthor = user.authSuccess.data._id === props.commentList.writer._id;
-    const isAdmin = user.authSuccess.data.role === 1; // 관리자 role이 1이라고 가정
+    const isAdmin = user.authSuccess.data.role === 'admin'; // 관리자 role이 1이라고 가정
 
     const actions = [
         <span onClick={onClickReplyOpen} key="comment-nested-reply-to" className="reply-action">답글 작성</span>,
