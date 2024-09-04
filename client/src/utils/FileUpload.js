@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import Dropzone from 'react-dropzone';
 import { UploadOutlined } from '@ant-design/icons'
 import axios from 'axios';
-function FileUpload(props) {
+import imageCompression from 'browser-image-compression';
 
+function FileUpload(props) {
     const [Images, setImages] = useState([])
 
     useEffect(() => {
@@ -13,14 +14,33 @@ function FileUpload(props) {
         }
     }, [props.initialImages]);
 
-    const onDrop = (files) => {
+    const compressImage = async (file) => {
+        const options = {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1280,
+            useWebWorker: true
+        }
+        try {
+            const compressedFile = await imageCompression(file, options);
+            return compressedFile;
+        } catch (error) {
+            console.error("이미지 압축 실패:", error);
+            return file;
+        }
+    }
+
+    const onDrop = async (files) => {
         let formData = new FormData();
         const config = {
-            header: { 'content-type': 'multipart/form-data' }
+            header: { 'content-type': 'multipart/form-data' },
+            timeout: 30000 
         }
-        files.forEach(file => {
-            formData.append("files", file)
-        });
+
+        for (let file of files) {
+            const compressedFile = await compressImage(file);
+            formData.append("files", compressedFile);
+        }
+
         axios.post('/api/product/uploadImage', formData, config)
             .then(response => {
                 if (response.data.success) {
@@ -32,10 +52,6 @@ function FileUpload(props) {
                 }
             })
     }
-
-
-
-
 
     const onDelete = (image) => {
         const currentIndex = Images.indexOf(image);
@@ -52,7 +68,7 @@ function FileUpload(props) {
             <Dropzone
                 onDrop={onDrop}
                 multiple={true}
-                maxSize={800000000}
+                maxSize={20 * 1024 * 1024}
             >
                 {({ getRootProps, getInputProps }) => (
                     <div style={{
@@ -73,9 +89,12 @@ function FileUpload(props) {
             <div style={{ display: 'flex', width: '350px', height: '240px', overflowX: 'scroll' }}>
 
                 {Images.map((image, index) => (
+
+                console.log('업로드시 image 파일명 확인', image),
                     <div onClick={() => onDelete(image)}>
                         <img style={{ minWidth: '300px', width: '300px', height: '240px' }} src={`/${image}`} alt={`productImg-${index}`} />
                     </div>
+
                 ))}
 
 

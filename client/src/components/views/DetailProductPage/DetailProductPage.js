@@ -82,7 +82,7 @@ function DetailProductPage() {
                             </Space>
                             <Divider style={{ margin: '16px 0' }} />
                             <div style={{ minHeight: '200px' }}>
-                                <Title level={4}>내용</Title>
+                                {/* <Title level={4}>내용</Title> */}
                                 <Paragraph style={{ fontSize: '16px', lineHeight: '1.6' }}>
                                     {product?.description}
                                 </Paragraph>
@@ -93,14 +93,14 @@ function DetailProductPage() {
                                     뒤로가기
                                 </Button>
                                 {(product?.writer._id === user?.authSuccess?.data?._id || user?.authSuccess?.data?.role === "admin") && (
-                                    <>
+                                    <Space size={4}>  {/* 여기에 작은 Space 추가 */}
                                         <Button icon={<EditOutlined />} onClick={handleUpdateProduct} type="primary">
                                             수정
                                         </Button>
                                         <Button danger icon={<DeleteOutlined />} onClick={handleDeleteProduct}>
                                             삭제
                                         </Button>
-                                    </>
+                                    </Space>
                                 )}
                             </Space>
                         </Space>

@@ -40,6 +40,8 @@ function AdminPage() {
     try {
       // 실제 삭제 API 호출
       console.log('====userId: ', userId)
+      const confirmDelete = window.confirm("사용자를 삭제하시겠습니까?");
+      if (!confirmDelete) return;
       await axios.delete(`/api/users/deleteUser?userId=${userId}`);
       setUsers(users.filter(user => user._id !== userId));
       message.success('사용자가 삭제되었습니다.');

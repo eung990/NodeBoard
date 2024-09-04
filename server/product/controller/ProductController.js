@@ -16,7 +16,7 @@ var storage = multer.diskStorage({
     },
     fileFilter: (req, file, cb) => {
         const ext = path.extname(file.originalname)
-        if (ext !== '.jpg' || ext !== '.png') {
+        if (ext !== '.jpg' || ext !== '.png'|| ext !== '.jpeg'|| ext !== '.heic') {
             return cb(res.status(400).end('only'))
         }
     },
@@ -39,7 +39,12 @@ const deleteFile = async (filePath) => {
 };
 
 
-var upload = multer({ storage: storage }).array("files", 5) // 최대 5개 파일 허용
+var upload = multer({
+    storage: storage,
+    limits: {
+      fileSize: 10 * 1024 * 1024 // 예: 10MB로 제한
+    }
+  }).array("files", 5)
 
 const input = {
 
