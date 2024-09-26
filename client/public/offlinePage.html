@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapShot - 오프라인</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1a2a3a;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+        .retry-btn {
+            background-color: #ffffff;
+            color: #1a2a3a;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .retry-btn:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">📷</div>
+        <h1>SnapShot</h1>
+        <p>죄송합니다. 현재 오프라인 상태입니다.</p>
+        <p>인터넷 연결을 확인하고 다시 시도해 주세요.</p>
+        <button class="retry-btn" onclick="window.location.reload()">다시 시도</button>
+    </div>
+
+    <script>
+        // 온라인 상태로 변경되면 자동으로 페이지 새로고침
+        window.addEventListener('online', () => {
+            window.location.reload();
+        });
+    </script>
+</body>
+</html>

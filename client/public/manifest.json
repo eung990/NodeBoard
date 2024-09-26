@@ -1,0 +1,32 @@
+{
+  "id":"ShapShotPWA",
+  "background_color": "#ffffff",
+  "description": "SnapShot - 순간을 기록하세요",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "SnapShot",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "SnapShot",
+  "start_url": "/",
+  "theme_color": "#1a2a3a",
+  "categories": [
+    "photo"
+  ],
+  "display_override": [
+    "standalone",
+    "window-controls-overlay"
+  ],
+  "icons": [
+    {
+      "src": "SnapShot512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "SnapShot192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
